@@ -14,23 +14,23 @@ Coded by www.creative-tim.com
 -->
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useTemplateStore } from "./store/templateStore";
 import Sidenav from "./examples/Sidenav";
 import Configurator from "@/examples/Configurator.vue";
 import Navbar from "@/examples/Navbars/Navbar.vue";
 import AppFooter from "@/examples/Footer.vue";
 
-const store = useStore();
-const isNavFixed = computed(() => store.state.isNavFixed);
-const darkMode = computed(() => store.state.darkMode);
-const isAbsolute = computed(() => store.state.isAbsolute);
-const showSidenav = computed(() => store.state.showSidenav);
-const layout = computed(() => store.state.layout);
-const showNavbar = computed(() => store.state.showNavbar);
-const showFooter = computed(() => store.state.showFooter);
-const showConfig = computed(() => store.state.showConfig);
-const hideConfigButton = computed(() => store.state.hideConfigButton);
-const toggleConfigurator = () => store.commit("toggleConfigurator");
+const store = useTemplateStore();
+const isNavFixed = computed(() => store.isNavFixed);
+const darkMode = computed(() => store.darkMode);
+const isAbsolute = computed(() => store.isAbsolute);
+const showSidenav = computed(() => store.showSidenav);
+const layout = computed(() => store.layout);
+const showNavbar = computed(() => store.showNavbar);
+const showFooter = computed(() => store.showFooter);
+const showConfig = computed(() => store.showConfig);
+const hideConfigButton = computed(() => store.hideConfigButton);
+const toggleConfigurator = () => store.toggleConfigurator();
 
 const navClasses = computed(() => {
   return {

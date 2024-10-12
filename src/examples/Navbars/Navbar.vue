@@ -1,12 +1,12 @@
 <script setup>
 import { computed, ref } from "vue";
-import { useStore } from "vuex";
+import { useTemplateStore } from "@/store/templateStore";
 import { useRoute } from "vue-router";
 import Breadcrumbs from "../Breadcrumbs.vue";
 
 const showMenu = ref(false);
-const store = useStore();
-const isRTL = computed(() => store.state.isRTL);
+const store = useTemplateStore();
+const isRTL = computed(() => store.isRTL);
 
 const route = useRoute();
 
@@ -18,8 +18,8 @@ const currentDirectory = computed(() => {
   return dir.charAt(0).toUpperCase() + dir.slice(1);
 });
 
-const minimizeSidebar = () => store.commit("sidebarMinimize");
-const toggleConfigurator = () => store.commit("toggleConfigurator");
+const minimizeSidebar = () => store.sidebarMinimize();
+const toggleConfigurator = () => store.toggleConfigurator();
 
 const closeMenu = () => {
   setTimeout(() => {

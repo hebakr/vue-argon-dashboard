@@ -1,6 +1,6 @@
 <script setup>
 import { onBeforeMount, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
+import { useTemplateStore } from "@/store/templateStore";
 import MiniStatisticsCard from "@/examples/Cards/MiniStatisticsCard.vue";
 import DeveloperCard from "./components/DeveloperCard.vue";
 import RocketCard from "./components/RocketCard.vue";
@@ -22,16 +22,16 @@ import team2 from "@/assets/img/team-2.jpg";
 import team3 from "@/assets/img/team-3.jpg";
 import team4 from "@/assets/img/team-4.jpg";
 
-const store = useStore();
+const store = useTemplateStore();
 
 onBeforeMount(() => {
-  store.state.isRTL = true;
+  store.isRTL = true;
   document.querySelector("html").setAttribute("lang", "ar");
   document.querySelector("html").setAttribute("dir", "rtl");
   document.querySelector("#app").classList.add("rtl");
 });
 onBeforeUnmount(() => {
-  store.state.isRTL = false;
+  store.isRTL = false;
   document.querySelector("html").removeAttribute("lang");
   document.querySelector("html").removeAttribute("dir");
   document.querySelector("#app").classList.remove("rtl");

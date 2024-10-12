@@ -1,10 +1,10 @@
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useTemplateStore } from "@/store/templateStore";
 
-const store = useStore();
-const isRTL = computed(() => store.state.isRTL);
-const isNavFixed = computed(() => store.state.isNavFixed);
+const store = useTemplateStore();
+const isRTL = computed(() => store.isRTL);
+const isNavFixed = computed(() => store.isNavFixed);
 
 defineProps({
   currentPage: {

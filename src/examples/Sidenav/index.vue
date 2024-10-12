@@ -1,15 +1,15 @@
 <script setup>
 import { computed } from "vue";
-import { useStore } from "vuex";
+import { useTemplateStore } from "@/store/templateStore";
 import SidenavList from "./SidenavList.vue";
 import logo from "@/assets/img/logo-ct-dark.png";
 import logoWhite from "@/assets/img/logo-ct.png";
 
-const store = useStore();
-const isRTL = computed(() => store.state.isRTL);
-const layout = computed(() => store.state.layout);
-const sidebarType = computed(() => store.state.sidebarType);
-const darkMode = computed(() => store.state.darkMode);
+const store = useTemplateStore();
+const isRTL = computed(() => store.isRTL);
+const layout = computed(() => store.layout);
+const sidebarType = computed(() => store.sidebarType);
+const darkMode = computed(() => store.darkMode);
 </script>
 <template>
   <div
@@ -40,7 +40,7 @@ const darkMode = computed(() => store.state.darkMode);
           alt="main_logo"
         />
 
-        <span class="ms-2 font-weight-bold me-2">Argon Dashboard 2</span>
+        <span class="ms-2 font-weight-bold me-2"> Pioneer Schools</span>
       </router-link>
     </div>
 

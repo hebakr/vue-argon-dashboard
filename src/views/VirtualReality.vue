@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, onBeforeMount, onBeforeUnmount } from "vue";
-import { useStore } from "vuex";
+import { useTemplateStore } from "@/store/templateStore";
 import Sidenav from "@/examples/Sidenav";
 import AppFooter from "@/examples/Footer.vue";
 import Navbar from "@/examples/Navbars/Navbar.vue";
@@ -13,37 +13,37 @@ import setTooltip from "@/assets/js/tooltip.js";
 
 const body = document.getElementsByTagName("body")[0];
 
-const store = useStore();
+const store = useTemplateStore();
 
-const sidebarMinimize = () => store.commit("sidebarMinimize");
-const toggleConfigurator = () => store.commit("toggleConfigurator");
+const sidebarMinimize = () => store.sidebarMinimize();
+const toggleConfigurator = () => store.toggleConfigurator();
 
 onMounted(() => {
   setTooltip();
 });
 
 onBeforeMount(() => {
-  store.state.layout = "vr";
-  store.state.showNavbar = false;
-  store.state.showSidenav = false;
-  store.state.showFooter = false;
+  store.layout = "vr";
+  store.showNavbar = false;
+  store.showSidenav = false;
+  store.showFooter = false;
   body.classList.add("virtual-reality");
-  store.state.isTransparent = "bg-white";
+  store.isTransparent = "bg-white";
 });
 onBeforeUnmount(() => {
-  store.state.layout = "default";
-  store.state.showNavbar = true;
-  store.state.showSidenav = true;
-  store.state.showFooter = true;
+  store.layout = "default";
+  store.showNavbar = true;
+  store.showSidenav = true;
+  store.showFooter = true;
   body.classList.remove("virtual-reality");
 
-  if (store.state.isPinned === false) {
+  if (store.isPinned === false) {
     const sidenav_show = document.querySelector(".g-sidenav-show");
     sidenav_show.classList.remove("g-sidenav-hidden");
     sidenav_show.classList.add("g-sidenav-pinned");
-    store.state.isPinned = true;
+    store.isPinned = true;
   }
-  store.state.isTransparent = "bg-transparent";
+  store.isTransparent = "bg-transparent";
 });
 </script>
 <template>
@@ -51,8 +51,8 @@ onBeforeUnmount(() => {
     <navbar
       :minNav="sidebarMinimize"
       :toggle="toggleConfigurator"
-      :class="`${store.state.isNavFixed ? store.state.navbarFixed_class : ''} ${
-        store.state.isNavFixed ? 'bg-white' : 'bg-success'
+      :class="`${store.isNavFixed ? store.navbarFixed_class : ''} ${
+        store.isNavFixed ? 'bg-white' : 'bg-success'
       }`"
     />
   </div>

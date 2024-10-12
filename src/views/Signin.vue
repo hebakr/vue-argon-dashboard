@@ -1,25 +1,25 @@
 <script setup>
 import { onBeforeUnmount, onBeforeMount } from "vue";
-import { useStore } from "vuex";
+import { useTemplateStore } from "@/store/templateStore";
 import Navbar from "@/examples/PageLayout/Navbar.vue";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
 const body = document.getElementsByTagName("body")[0];
 
-const store = useStore();
+const store = useTemplateStore();
 onBeforeMount(() => {
-  store.state.hideConfigButton = true;
-  store.state.showNavbar = false;
-  store.state.showSidenav = false;
-  store.state.showFooter = false;
+  store.hideConfigButton = true;
+  store.showNavbar = false;
+  store.showSidenav = false;
+  store.showFooter = false;
   body.classList.remove("bg-gray-100");
 });
 onBeforeUnmount(() => {
-  store.state.hideConfigButton = false;
-  store.state.showNavbar = true;
-  store.state.showSidenav = true;
-  store.state.showFooter = true;
+  store.hideConfigButton = false;
+  store.showNavbar = true;
+  store.showSidenav = true;
+  store.showFooter = true;
   body.classList.add("bg-gray-100");
 });
 </script>

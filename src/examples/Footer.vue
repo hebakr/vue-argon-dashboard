@@ -1,6 +1,6 @@
 <script setup>
-import { useStore } from "vuex";
-const store = useStore();
+import { useTemplateStore } from "@/store/templateStore";
+const store = useTemplateStore();
 </script>
 <template>
   <footer class="py-3 footer">
@@ -9,7 +9,7 @@ const store = useStore();
         <div class="mb-4 col-lg-6 mb-lg-0">
           <div
             class="text-sm text-center copyright text-muted"
-            :class="store.state.isRTL ? 'text-lg-end' : 'text-lg-start'"
+            :class="store.isRTL ? 'text-lg-end' : 'text-lg-start'"
           >
             ©
             {{ new Date().getFullYear() }}, made with

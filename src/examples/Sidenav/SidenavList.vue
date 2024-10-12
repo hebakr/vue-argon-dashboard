@@ -1,13 +1,11 @@
 <script setup>
 import { computed } from "vue";
 import { useRoute } from "vue-router";
-import { useStore } from "vuex";
+import { useTemplateStore } from "@/store/templateStore";
 
 import SidenavItem from "./SidenavItem.vue";
-import SidenavCard from "./SidenavCard.vue";
-
-const store = useStore();
-const isRTL = computed(() => store.state.isRTL);
+const store = useTemplateStore();
+const isRTL = computed(() => store.isRTL);
 
 const getRoute = () => {
   const route = useRoute();
@@ -55,18 +53,6 @@ const getRoute = () => {
         >
           <template v-slot:icon>
             <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/virtual-reality"
-          :class="getRoute() === 'virtual-reality' ? 'active' : ''"
-          :navText="isRTL ? 'الواقع الافتراضي' : 'Virtual Reality'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-app text-info text-sm opacity-10"></i>
           </template>
         </sidenav-item>
       </li>
@@ -139,26 +125,4 @@ const getRoute = () => {
     </ul>
   </div>
 
-  <div class="pt-3 mx-3 mt-3 sidenav-footer">
-    <sidenav-card
-      :card="{
-        title: 'Need Help?',
-        description: 'Please check our docs',
-        links: [
-          {
-            label: 'Documentation',
-            route:
-              'https://www.creative-tim.com/learning-lab/vue/overview/argon-dashboard/',
-            color: 'dark',
-          },
-          {
-            label: 'Buy now',
-            route:
-              'https://www.creative-tim.com/product/vue-argon-dashboard-pro?ref=vadp',
-            color: 'success',
-          },
-        ],
-      }"
-    />
-  </div>
 </template>
