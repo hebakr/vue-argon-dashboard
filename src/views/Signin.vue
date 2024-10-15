@@ -1,38 +1,26 @@
 <script setup>
-import { onBeforeUnmount, onBeforeMount } from "vue";
-import { useTemplateStore } from "@/store/templateStore";
-import Navbar from "@/examples/PageLayout/Navbar.vue";
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import ArgonInput from "@/components/ArgonInput.vue";
 import ArgonSwitch from "@/components/ArgonSwitch.vue";
 import ArgonButton from "@/components/ArgonButton.vue";
-const body = document.getElementsByTagName("body")[0];
+import { useAuthStore } from "@/store/auth";
+const store = useAuthStore();
+const userLogin = reactive({});
+const errorLogin = ref(false);
 
-const store = useTemplateStore();
-onBeforeMount(() => {
-  store.hideConfigButton = true;
-  store.showNavbar = false;
-  store.showSidenav = false;
-  store.showFooter = false;
-  body.classList.remove("bg-gray-100");
-});
-onBeforeUnmount(() => {
-  store.hideConfigButton = false;
-  store.showNavbar = true;
-  store.showSidenav = true;
-  store.showFooter = true;
-  body.classList.add("bg-gray-100");
-});
+const router = useRouter();
+
+async function handleLogin() {
+  await store.login(userLogin.email, userLogin.password);
+  if (store.isLoggedIn) router.push("/");
+  else errorLogin.value = !store.isLoggedIn;
+}
 </script>
 <template>
   <div class="container top-0 position-sticky z-index-sticky">
     <div class="row">
-      <div class="col-12">
-        <navbar
-          isBlur="blur  border-radius-lg my-3 py-2 start-0 end-0 mx-4 shadow"
-          v-bind:darkMode="true"
-          isBtn="bg-gradient-success"
-        />
-      </div>
+      <div class="col-12"></div>
     </div>
   </div>
   <main class="mt-0 main-content">
@@ -44,16 +32,20 @@ onBeforeUnmount(() => {
               class="mx-auto col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0"
             >
               <div class="card card-plain">
+                <div class="alert alert-danger" v-if="errorLogin">
+                  <p class="text-light">Invalid username or password!</p>
+                </div>
                 <div class="pb-0 card-header text-start">
                   <h4 class="font-weight-bolder">Sign In</h4>
                   <p class="mb-0">Enter your email and password to sign in</p>
                 </div>
                 <div class="card-body">
-                  <form role="form">
+                  <form role="form" @submit.prevent="handleLogin">
                     <div class="mb-3">
                       <argon-input
                         id="email"
                         type="email"
+                        v-model="userLogin.email"
                         placeholder="Email"
                         name="email"
                         size="lg"
@@ -63,6 +55,7 @@ onBeforeUnmount(() => {
                       <argon-input
                         id="password"
                         type="password"
+                        v-model="userLogin.password"
                         placeholder="Password"
                         name="password"
                         size="lg"
@@ -102,7 +95,7 @@ onBeforeUnmount(() => {
               <div
                 class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
                 style="
-                  background-image: url(&quot;https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg&quot;);
+                  background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg');
                   background-size: cover;
                 "
               >

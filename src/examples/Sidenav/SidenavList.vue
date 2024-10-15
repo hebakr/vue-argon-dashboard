@@ -1,17 +1,77 @@
 <script setup>
 import { computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useTemplateStore } from "@/store/templateStore";
-
+// import ArgonButton from "../../components/ArgonButton.vue";
 import SidenavItem from "./SidenavItem.vue";
+import { useAuthStore } from "@/store/auth";
+import { useSchoolsStore } from "../../store/schools";
+
 const store = useTemplateStore();
+const schoolsStore = useSchoolsStore();
+const authStore = useAuthStore();
 const isRTL = computed(() => store.isRTL);
+const router = useRouter();
+// const navItems = ref(schoolRoutes)
 
 const getRoute = () => {
   const route = useRoute();
   const routeArr = route.path.split("/");
   return routeArr[1];
 };
+
+const logout = async () => {
+  await authStore.signout();
+  router.push({ name: "signin" });
+};
+
+// const navItems = [
+//   {
+//     name: "dashboard",
+//     title: isRTL.value ? "لوحة القيادة" : "Dashboard",
+//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+//   },
+//   {
+//     name: "students",
+//     title: isRTL.value ? "غرف الفصول" : "Students",
+//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+//   },
+//   {
+//     name: "teachers",
+//     title: isRTL.value ? "غرف الفصول" : "Teachers",
+//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+//   },
+//   {
+//     name: "grades",
+//     title: isRTL.value ? "غرف الفصول" : "Grades",
+//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+//   },
+//   {
+//     name: "subjects",
+//     title: isRTL.value ? "المواد الدراسية" : "Subjects",
+//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+//   },
+//   {
+//     name: "class-rooms",
+//     title: isRTL.value ? "غرف الفصول" : "Class Rooms",
+//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+//   },
+//   // {
+//   //   name: "tables",
+//   //   title: isRTL.value ? " الجداول" : "Tables",
+//   //   icon: '<i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>',
+//   // },
+//   // {
+//   //   name: "clients",
+//   //   title: isRTL.value ? "العملاء" : "Clients",
+//   //   icon: '<i class="ni ni-credit-card text-success text-sm opacity-10"></i>',
+//   // },
+//   // {
+//   //   name: "Brands",
+//   //   title: isRTL.value ? "المنظمات" : "Brands",
+//   //   icon: '<i class="ni ni-credit-card text-success text-sm opacity-10"></i>',
+//   // },
+// ];
 </script>
 <template>
   <div
@@ -19,110 +79,38 @@ const getRoute = () => {
     id="sidenav-collapse-main"
   >
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li
+        class="nav-item"
+        v-for="item in schoolsStore.schoolRoutes"
+        :key="item.route"
+      >
         <sidenav-item
-          to="/dashboard-default"
-          :class="getRoute() === 'dashboard-default' ? 'active' : ''"
-          :navText="isRTL ? 'لوحة القيادة' : 'Dashboard'"
+          :to="item.route"
+          :class="getRoute() === item.name ? 'active' : ''"
+          :navText="item.title"
         >
           <template v-slot:icon>
-            <i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/tables"
-          :class="getRoute() === 'tables' ? 'active' : ''"
-          :navText="isRTL ? 'الجداول' : 'Tables'"
-        >
-          <template v-slot:icon>
-            <i
-              class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"
-            ></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/billing"
-          :class="getRoute() === 'billing' ? 'active' : ''"
-          :navText="isRTL ? 'الفواتیر' : 'Billing'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-credit-card text-success text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/rtl-page"
-          :class="getRoute() === 'rtl-page' ? 'active' : ''"
-          navText="RTL"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
+            <span v-html="item.icon" />
           </template>
         </sidenav-item>
       </li>
 
       <li class="mt-3 nav-item">
-        <h6
-          v-if="isRTL"
-          class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
-          :class="isRTL ? 'me-4' : 'ms-2'"
-        >
-          صفحات المرافق
-        </h6>
-
-        <h6
-          v-else
-          class="text-xs ps-4 text-uppercase font-weight-bolder opacity-6"
-          :class="isRTL ? 'me-4' : 'ms-2'"
-        >
-          ACCOUNT PAGES
-        </h6>
+        <hr />
       </li>
 
       <li class="nav-item">
-        <sidenav-item
-          to="/profile"
-          :class="getRoute() === 'profile' ? 'active' : ''"
-          :navText="isRTL ? 'حساب تعريفي' : 'Profile'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/signin"
-          :class="getRoute() === 'signin' ? 'active' : ''"
-          :navText="isRTL ? 'تسجيل الدخول' : 'Sign In'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-single-copy-04 text-danger text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
-      </li>
-
-      <li class="nav-item">
-        <sidenav-item
-          to="/signup"
-          :class="getRoute() === 'signup' ? 'active' : ''"
-          :navText="isRTL ? 'اشتراك' : 'Sign Up'"
-        >
-          <template v-slot:icon>
-            <i class="ni ni-collection text-info text-sm opacity-10"></i>
-          </template>
-        </sidenav-item>
+        <a class="nav-link" @click="logout">
+          <div
+            class="icon icon-shape icon-sm text-center d-flex align-items-center justify-content-center"
+          >
+            <i class="fa fa-sign-out text-dark text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text" :class="isRTL ? ' me-1' : 'ms-1'">
+            {{ isRTL ? "تسجيل الخروج" : "Signout" }}
+          </span>
+        </a>
       </li>
     </ul>
   </div>
-
 </template>

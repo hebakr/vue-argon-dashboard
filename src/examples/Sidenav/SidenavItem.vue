@@ -12,16 +12,7 @@ const minimizeSidebar = () => {
   }
 };
 
-defineProps({
-  to: {
-    type: String,
-    required: true,
-  },
-  navText: {
-    type: String,
-    required: true,
-  },
-});
+defineProps(["to", "navText"]);
 </script>
 <template>
   <router-link :to="to" class="nav-link" @click="minimizeSidebar">

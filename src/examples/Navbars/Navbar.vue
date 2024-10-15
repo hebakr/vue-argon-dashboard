@@ -14,7 +14,8 @@ const currentRouteName = computed(() => {
   return route.name;
 });
 const currentDirectory = computed(() => {
-  let dir = route.path.split("/")[1];
+  const parts = route.path.split("/");
+  let dir = parts[parts.length - 1];
   return dir.charAt(0).toUpperCase() + dir.slice(1);
 });
 
@@ -64,7 +65,7 @@ const closeMenu = () => {
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
             <router-link
-              :to="{ name: 'Signin' }"
+              :to="{ name: 'signin' }"
               class="px-0 nav-link font-weight-bold text-white"
               target="_blank"
             >
