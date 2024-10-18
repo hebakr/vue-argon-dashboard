@@ -87,7 +87,7 @@ const logout = async () => {
         <sidenav-item
           :to="item.route"
           :class="getRoute() === item.name ? 'active' : ''"
-          :navText="item.title"
+          :navText="$t(item.title)"
         >
           <template v-slot:icon>
             <span v-html="item.icon" />

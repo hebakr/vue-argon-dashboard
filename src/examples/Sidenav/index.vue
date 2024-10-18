@@ -4,18 +4,20 @@ import { useTemplateStore } from "@/store/templateStore";
 import SidenavList from "./SidenavList.vue";
 import logo from "@/assets/img/logo-ct-dark.png";
 import logoWhite from "@/assets/img/logo-ct.png";
+import { useSchoolsStore } from "../../store/schools";
 
 const store = useTemplateStore();
 const isRTL = computed(() => store.isRTL);
 const layout = computed(() => store.layout);
 const sidebarType = computed(() => store.sidebarType);
 const darkMode = computed(() => store.darkMode);
+const schoolsStore = useSchoolsStore();
 </script>
 <template>
   <div
     v-show="layout === 'default'"
     class="min-height-300 position-absolute w-100"
-    :class="`${darkMode ? 'bg-transparent' : 'bg-success'}`"
+    :class="`${darkMode ? 'bg-transparent' : 'bg-info'}`"
   />
 
   <aside
@@ -25,6 +27,7 @@ const darkMode = computed(() => store.darkMode);
         layout === 'landing' ? 'bg-transparent shadow-none' : ' '
       } ${sidebarType}`"
     id="sidenav-main"
+    data-color="info"
   >
     <div class="sidenav-header">
       <i
@@ -33,14 +36,16 @@ const darkMode = computed(() => store.darkMode);
         id="iconSidenav"
       ></i>
 
-      <router-link class="m-0 navbar-brand" to="/">
+      <router-link class="m-0 navbar-brand" to="./">
         <img
           :src="darkMode || sidebarType === 'bg-default' ? logoWhite : logo"
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
 
-        <span class="ms-2 font-weight-bold me-2"> Pioneer Schools</span>
+        <span class="ms-2 font-weight-bold me-2 text-uppercase">
+          {{ schoolsStore.currentSchool?.name }}</span
+        >
       </router-link>
     </div>
 

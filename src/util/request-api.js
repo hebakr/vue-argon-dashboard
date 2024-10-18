@@ -22,11 +22,15 @@ export const request = async (url, method = "GET", data = {}) => {
       default:
         response = await axios.get(url, { headers });
     }
-    return response;
+    return { data: response.data };
   } catch (e) {
     if (e.response?.status === 401) {
       location.href = "/auth/signin";
-      // console.log(e);
     }
+    if (e.response?.status === 422) {
+      console.log(e);
+    }
+
+    return { error: e.response.data.error };
   }
 };

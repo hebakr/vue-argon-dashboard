@@ -1,5 +1,5 @@
 <script setup>
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "blur"]);
 
 defineProps({
   size: {
@@ -68,6 +68,7 @@ const hasIcon = (icon) => (icon ? "input-group" : null);
 </script>
 <template>
   <div class="form-group">
+    <label :for="id"><slot /></label>
     <div :class="hasIcon(icon)">
       <span v-if="iconDir === 'left'" class="input-group-text">
         <i :class="getIcon(icon)"></i>
@@ -82,6 +83,7 @@ const hasIcon = (icon) => (icon ? "input-group" : null);
         :placeholder="placeholder"
         :isRequired="isRequired"
         @input="emit('update:modelValue', $event.target.value)"
+        @blur="emit('blur')"
       />
       <span v-if="iconDir === 'right'" class="input-group-text">
         <i :class="getIcon(icon)"></i>

@@ -4,6 +4,9 @@ import { onMounted, ref } from "vue";
 import CrudList from "@/components/CrudList.vue";
 import { useRoomsStore } from "../store/class-rooms";
 import { useRoute } from "vue-router";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 const { params } = useRoute();
 const submitting = ref(false);
 const formOpen = ref(true);
@@ -25,20 +28,27 @@ const columns = [
 ];
 
 const handleDelete = async (item) => {
-  await store.deleteRoom(item);
-  store.fetchRooms(params.schoolId);
+  await store.remove(item);
+  store.findAll(params.schoolId);
+  toast("Room deleted");
 };
 
 const handleSubmit = async (data) => {
-  submitting.value = true;
-  await store.saveRoom(data);
+  const response = await store.save(data);
+  if (response.error) {
+    toast.error(response.error);
+  } else {
+    toast.success(
+      `Room ${data.id > 0 ? "updated" : "created"} successfully!`
+    );
+    store.findAll(params.schoolId);
+    formOpen.value = false;
+  }
   submitting.value = false;
-  formOpen.value = false;
-  store.fetchRooms(params.schoolId);
 };
 
 const store = useRoomsStore();
-onMounted(() => store.fetchRooms(params.schoolId));
+onMounted(() => store.findAll(params.schoolId));
 </script>
 
 <template>
@@ -46,7 +56,7 @@ onMounted(() => store.fetchRooms(params.schoolId));
     actionTitle="Add Class Room"
     title="Class rooms"
     :columns="columns"
-    :data="store.rooms"
+    :data="store.list"
     :initialFormData="{ name: '', active: true, schoolId: params.schoolId }"
     :submitting="submitting"
     :formOpen="formOpen"

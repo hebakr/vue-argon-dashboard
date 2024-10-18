@@ -54,7 +54,6 @@ export const useSchoolsStore = defineStore({
 
   getters: {
     schoolRoutes: (state) => {
-      const isRTL = false;
       return state.currentSchool == null
         ? []
         : [
@@ -63,48 +62,48 @@ export const useSchoolsStore = defineStore({
                 name: "dashboard",
                 params: { schoolId: state.currentSchool.id },
               },
-              title: isRTL.value ? "لوحة القيادة" : "Dashboard",
-              icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+              title: "nav.dashboard",
+              icon: '<i class="fa fa-qrcode text-primary text-lg opacity-8"></i>',
             },
             {
               route: {
                 name: "students",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
-              title: isRTL.value ? "غرف الفصول" : "Students",
-              icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+              title: "nav.students",
+              icon: '<i class="fa fa-users text-primary text-lg opacity-8"></i>',
             },
             {
               route: {
                 name: "teachers",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
-              title: isRTL.value ? "غرف الفصول" : "Teachers",
-              icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+              title: "nav.teachers",
+              icon: '<i class="fa fa-user-graduate text-primary text-lg opacity-8"></i>',
             },
             {
               route: {
                 name: "grades",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
-              title: isRTL.value ? "غرف الفصول" : "Grades",
-              icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+              title: "nav.grades",
+              icon: '<i class="fa fa-list-ul text-primary text-lg opacity-8"></i>',
             },
             {
               route: {
                 name: "subjects",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
-              title: isRTL.value ? "المواد الدراسية" : "Subjects",
-              icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+              title: "nav.subjects",
+              icon: '<i class="fa fa-book-open text-primary text-lg opacity-8"></i>',
             },
             {
               route: {
                 name: "class-rooms",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
-              title: isRTL.value ? "غرف الفصول" : "Class Rooms",
-              icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
+              title: "nav.classRooms",
+              icon: '<i class="fa fa-building text-primary text-lg opacity-8"></i>',
             },
           ];
     },

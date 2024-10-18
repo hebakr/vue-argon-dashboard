@@ -4,7 +4,9 @@ import { onMounted, ref } from "vue";
 import CrudList from "@/components/CrudList.vue";
 import { useSubjectsStore } from "../store/subjects";
 import { useRoute } from "vue-router";
+import { useToast } from "vue-toastification";
 
+const toast = useToast();
 const store = useSubjectsStore();
 const { params } = useRoute();
 
@@ -30,14 +32,21 @@ const columns = [
 const handleDelete = async (item) => {
   await store.remove(item);
   store.findAll(params.schoolId);
+  toast("Subject deleted");
 };
 
 const handleSubmit = async (data) => {
-  submitting.value = true;
-  await store.save(data);
+  const response = await store.save(data);
+  if (response.error) {
+    toast.error(response.error);
+  } else {
+    toast.success(
+      `Subject ${data.id > 0 ? "updated" : "created"} successfully!`
+    );
+    store.findAll(params.schoolId);
+    formOpen.value = false;
+  }
   submitting.value = false;
-  formOpen.value = false;
-  store.findAll(params.schoolId);
 };
 
 onMounted(() => store.findAll(params.schoolId));
@@ -45,8 +54,8 @@ onMounted(() => store.findAll(params.schoolId));
 
 <template>
   <crud-list
-    actionTitle="Add Subject"
-    title="Subjects"
+    :actionTitle="$t('subjects.add')"
+    :title="$t('subjects.title')"
     :columns="columns"
     :data="store.list"
     :initialFormData="{ name: '', active: true, schoolId: params.schoolId }"

@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import config from "../util/config";
+import { request } from "../util/request-api";
 
 export const useAuthStore = defineStore({
   id: "auth",
@@ -39,7 +40,7 @@ export const useAuthStore = defineStore({
         localStorage.removeItem("authToken");
         localStorage.removeItem("currentUser");
         this.accessToken = null;
-        await axios.delete(`${config.baseUrl}users/sign_out`);
+        await request(`${config.baseUrl}users/sign_out`, "DELETE");
       } catch (ex) {
         console.log(ex.code);
       }

@@ -2,6 +2,10 @@
 import { ref } from "vue";
 import PageLayout from "./PageLayout.vue";
 import AppDialog from "@/components/AppDialog.vue";
+import { useVuelidate } from "@vuelidate/core";
+import { useTemplateStore } from "../store/templateStore";
+
+const store = useTemplateStore()
 
 const open = ref(false);
 const formData = ref(null);
@@ -20,8 +24,15 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  formSize: {
+    type: String,
+    default: "default",
+  },
   initialFormData: Object,
+  formValidationRules: Object,
 });
+
+const v$ = useVuelidate(props.formValidationRules, formData);
 
 const handleNew = () => {
   emit("onFormOpen");
@@ -44,7 +55,10 @@ const handleClose = () => {
   formData.value = null;
 };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
+  await v$.value.$validate();
+  console.log(v$.value);
+
   emit("onSubmit", formData.value);
 };
 
@@ -55,11 +69,13 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
     <template v-slot:actions>
       <button class="btn btn-default" @click="handleNew">
         <i class="fa fa-plus"></i>
-        {{ props.actionTitle }}
+        <span class="d-none d-md-inline-block mx-1">{{
+          props.actionTitle
+        }}</span>
       </button>
     </template>
 
-    <div class="table-responsive p-0" v-if="data.length > 0">
+    <div class="table-responsive p-0" v-if="data?.length > 0">
       <table class="table align-items-center justify-content-center mb-0">
         <thead>
           <th v-for="c in props.columns" :key="c.property">{{ c.head }}</th>
@@ -72,7 +88,7 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
                 c.formatter ? c.formatter(item[c.property]) : item[c.property]
               }}</span>
             </td>
-            <td class="px-4 py-2 text-end">
+            <td class="px-4 py-2" :class="store.isRTL ? 'text-start' : 'text-end'">
               <a class="btn btn-default btn-xs" @click="() => handleEdit(item)">
                 <i class="fa fa-edit"></i>
               </a>
@@ -101,9 +117,12 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
     submit-title="Save"
     :loading="props.submitting"
     :submitDisabled="false"
+    :formSize="props.formSize"
     @submitPressed="handleSubmit"
     @cancel="handleClose"
   >
-    <slot name="form" :formData="formData">Add form here!{{ formData }}</slot>
+    <slot name="form" :formData="formData" :validator="v$"
+      >Add form here!{{ formData }}</slot
+    >
   </app-dialog>
 </template>

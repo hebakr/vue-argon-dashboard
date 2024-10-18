@@ -31,6 +31,21 @@ const darkMode = () => {
     activateDarkMode();
   }
 };
+
+const setLanguageArabic = ($i18n) => {
+  $i18n.locale = "ar";
+  store.isRTL = true;
+  document.querySelector("html").setAttribute("lang", "ar");
+  document.querySelector("html").setAttribute("dir", "rtl");
+  document.querySelector("#app").classList.add("rtl");
+};
+const setLanguageEnglish = ($i18n) => {
+  $i18n.locale = "en";
+  store.isRTL = false;
+  document.querySelector("html").setAttribute("lang", "en");
+  document.querySelector("html").setAttribute("dir", "ltr");
+  document.querySelector("#app").classList.remove("rtl");
+};
 </script>
 <template>
   <div class="fixed-plugin">
@@ -131,6 +146,37 @@ const darkMode = () => {
             Dark
           </button>
         </div>
+        <!-- Sidenav Type -->
+        <div class="mt-3">
+          <h6 class="mb-0">Language</h6>
+          <p class="text-sm">Choose the user interface language.</p>
+        </div>
+        <div class="d-flex gap-2">
+          <button
+            id="btn-white"
+            class="btn w-100 px-3 mb-2"
+            :class="
+              sidebarType === 'bg-white'
+                ? 'bg-gradient-success'
+                : 'btn-outline-success'
+            "
+            @click="() => setLanguageEnglish($i18n)"
+          >
+            English
+          </button>
+          <button
+            id="btn-dark"
+            class="btn w-100 px-3 mb-2"
+            :class="
+              sidebarType === 'bg-default'
+                ? 'bg-gradient-success'
+                : 'btn-outline-success'
+            "
+            @click="() => setLanguageArabic($i18n)"
+          >
+            Arabic
+          </button>
+        </div>
         <p class="mt-2 text-sm d-xl-none d-block">
           You can change the sidenav type just on desktop view.
         </p>
@@ -162,6 +208,7 @@ const darkMode = () => {
             />
           </div>
         </div>
+
         <a
           class="btn bg-gradient-dark w-100"
           href="https://www.creative-tim.com/product/vue-argon-dashboard"

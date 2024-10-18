@@ -1,6 +1,6 @@
 <script setup>
 const emit = defineEmits("cancel", "submitPressed");
-defineProps({
+const props = defineProps({
   title: {
     type: String,
     required: true,
@@ -25,6 +25,10 @@ defineProps({
     type: Boolean,
     required: false,
   },
+  formSize: {
+    type: String,
+    default: "default",
+  },
 });
 
 const handleClose = () => {
@@ -33,6 +37,12 @@ const handleClose = () => {
 
 const handleSubmit = () => {
   emit("submitPressed");
+};
+
+const getSize = () => {
+  if (props.formSize === "default") return "";
+
+  return `modal-${props.formSize}`;
 };
 </script>
 
@@ -45,7 +55,7 @@ const handleSubmit = () => {
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
     >
-      <div class="modal-dialog modal-fullscreen-md-down">
+      <div class="modal-dialog modal-fullscreen-md-down" :class="getSize()">
         <div class="modal-content">
           <div class="modal-header" v-if="title">
             <h3 class="modal-title fs-6" id="exampleModalLabel">
@@ -56,7 +66,10 @@ const handleSubmit = () => {
               class="btn-close"
               data-bs-dismiss="modal"
               aria-label="Close"
-            ></button>
+              @click="handleClose"
+            >
+              <i class="fa fa-times fa-3" />
+            </button>
           </div>
           <div class="modal-body">
             <slot />
@@ -110,5 +123,11 @@ const handleSubmit = () => {
 
 .app-modal-backdrop {
   z-index: 10001;
+}
+.btn-close {
+  color: black;
+}
+.btn-close:hover {
+  color: black;
 }
 </style>
