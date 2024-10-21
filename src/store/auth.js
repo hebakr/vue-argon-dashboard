@@ -2,6 +2,8 @@ import { defineStore } from "pinia";
 import axios from "axios";
 import config from "../util/config";
 import { request } from "../util/request-api";
+import camelcaseKeys from "camelcase-keys";
+import snakecaseKeys from "snakecase-keys";
 
 export const useAuthStore = defineStore({
   id: "auth",
@@ -45,7 +47,26 @@ export const useAuthStore = defineStore({
         console.log(ex.code);
       }
     },
+    async findTeacher(teacherId) {
+      const response = await axios.get(
+        `${config.baseUrl}invitations?teacherId=${teacherId}`
+      );
+      return camelcaseKeys(response.data);
+    },
 
+    async createTeacherAccount(data) {
+      try {
+        const response = await axios.post(
+          `${config.baseUrl}invitations`,
+          snakecaseKeys(data)
+        );
+        return camelcaseKeys(response.data);
+      } catch (error) {
+        console.log("ERROR", error.response.data.error);
+        
+        return { error: true, message: error.response.data.error };
+      }
+    },
     updateBoard(board) {
       this.board = board;
     },

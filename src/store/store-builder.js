@@ -29,7 +29,6 @@ export const buildCrudStore = (id) => {
           snakecaseKeys(model)
         );
         this.loading = false;
-        console.log(response);
         return camelcaseKeys(response);
       },
       async update(model) {

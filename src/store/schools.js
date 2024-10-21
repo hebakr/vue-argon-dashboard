@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import config from "../util/config";
 import camelcaseKeys from "camelcase-keys";
 import { request } from "../util/request-api";
+import snakecaseKeys from "snakecase-keys";
 
 export const useSchoolsStore = defineStore({
   id: "schools",
@@ -49,6 +50,16 @@ export const useSchoolsStore = defineStore({
         "DELETE"
       );
       await this.fetchSchools(brandId);
+    },
+    async isUserExist(email, schoolId, teacherId) {
+      const response = await request(
+        `${config.baseUrl}api/v1/schools/${schoolId}/find-user`,
+        "POST",
+        snakecaseKeys({ email, teacherId })
+      );
+      if (response.data) return true;
+
+      return false;
     },
   },
 

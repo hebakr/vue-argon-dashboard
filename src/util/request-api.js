@@ -31,6 +31,10 @@ export const request = async (url, method = "GET", data = {}) => {
       console.log(e);
     }
 
+    if (e.response?.status === 404) {
+      return { error: "Not found" };
+    }
+
     return { error: e.response.data.error };
   }
 };

@@ -6,53 +6,122 @@ import { useGradesStore } from "../store/grades";
 import { useRoute } from "vue-router";
 import ArgonInput from "@/components/ArgonInput.vue";
 import { useSubjectsStore } from "../store/subjects";
-import { required } from "@vuelidate/validators";
+import { required, email, helpers } from "@vuelidate/validators";
+import { useToast } from "vue-toastification";
+import { useTeachersStore } from "../store/teachers";
+import { useSchoolsStore } from "../store/schools";
 
 const { params } = useRoute();
 const submitting = ref(false);
 const formOpen = ref(true);
+const teacherToEdit = ref(null);
+const toast = useToast();
+
+const store = useTeachersStore();
+const gradesStore = useGradesStore();
+const subjectsStore = useSubjectsStore();
+const schoolsStore = useSchoolsStore();
+const initialFormData = {
+  schoolId: params.schoolId,
+  gender: "male",
+  status: true,
+};
 
 const columns = [
   {
-    head: "ID",
-    property: "id",
+    head: "Name",
+    property: "fullName",
   },
   {
-    head: "Name",
-    property: "name",
+    head: "email",
+    property: "email",
+  },
+  {
+    head: "phone",
+    property: "phone",
+  },
+  {
+    head: "Gender",
+    property: "gender",
   },
   {
     head: "Status",
-    property: "active",
+    property: "status",
     formatter: (d) => (d ? "Active" : "Not active"),
   },
 ];
 
 const handleDelete = async (item) => {
-  console.log(item);
+  const response = await store.remove(item);
+  if (response.error) {
+    toast.error(response.error);
+  } else {
+    store.findAll(params.schoolId);
+    toast.info("Teacher deleted!");
+  }
+};
+
+const handleEdit = (item) => {
+  teacherToEdit.value = item;
+  formOpen.value = true;
 };
 
 const handleSubmit = async (data) => {
   submitting.value = true;
-  console.log(data);
-
-  // await store.saveRoom(data);
-  // submitting.value = false;
-  // formOpen.value = false;
-  // store.fetchRooms(params.schoolId);
+  const response = await store.save(data);
+  console.log(response);
+  if (response.error) {
+    toast.error(response.error);
+  } else {
+    toast.success(
+      `Teacher ${data.id > 0 ? "updated" : "created"} successfully!`
+    );
+    store.findAll(params.schoolId);
+    formOpen.value = false;
+  }
+  submitting.value = false;
 };
 
-const gradesStore = useGradesStore();
-const subjectsStore = useSubjectsStore();
 onMounted(() => gradesStore.findAll(params.schoolId));
 onMounted(() => subjectsStore.findAll(params.schoolId));
+onMounted(() => store.findAll(params.schoolId));
 
-const isInvalid = (k, validator) => {
-  return validator[k].$dirty && validator[k].$errors.length;
-};
+const phone = helpers.regex(
+  /^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{5}$/
+);
 
-const isValid = (k, validator) => {
-  return validator[k].$dirty && !validator[k].$invalid;
+const { withAsync } = helpers;
+const uniqueEmail = withAsync(async (value) => {
+  console.log('uniqueEmail', email)
+  const exists = await schoolsStore.isUserExist(
+    value,
+    params.schoolId,
+    teacherToEdit.value?.id
+  );
+
+  return !exists;
+});
+const formValidations = {
+  firstName: {
+    required: helpers.withMessage("First name is required", required),
+  },
+  lastName: {
+    required: helpers.withMessage("Last name is required", required),
+  },
+  email: {
+    required,
+    email,
+    uniqueEmail: helpers.withMessage(
+      "This email already exist on the current school",
+      uniqueEmail
+    ),
+  },
+  gradeIds: { required },
+  subjectIds: { required },
+  phone: {
+    required,
+    phone: helpers.withMessage("Please enter a valid phone number", phone),
+  },
 };
 </script>
 
@@ -61,16 +130,16 @@ const isValid = (k, validator) => {
     actionTitle="Add Teacher"
     title="Teachers"
     :columns="columns"
-    :data="[]"
-    :initialFormData="{ schoolId: params.schoolId }"
+    :data="store.list"
+    :initialFormData="initialFormData"
     :submitting="submitting"
-    :formValidationRules="{ firstName: { required }, lastName: { required } }"
+    :formValidationRules="formValidations"
     :formOpen="formOpen"
     :modelName="'Teacher'"
     @onDelete="handleDelete"
+    @onFormOpen="handleEdit"
     @onSubmit="handleSubmit"
     formSize="xl"
-    @onFormOpen="() => (formOpen = true)"
   >
     <template #form="{ formData, validator }">
       <div class="card">
@@ -80,42 +149,58 @@ const isValid = (k, validator) => {
           <div class="row">
             <div class="col-12 col-md-6">
               <argon-input
-                @blur="validator.firstName.$touch()"
                 id="firstName"
                 v-model="formData.firstName"
-                :error="isInvalid('firstName', validator)"
-                :success="isValid('firstName', validator)"
+                :validator="validator.firstName"
                 >First name</argon-input
               >
-              <!-- <div
-                v-for="error in validator.firstName.$errors"
-                :key="error.$uid"
-              >
-                <p>{{ error.$message }}</p>
-              </div> -->
             </div>
             <div class="col-12 col-md-6">
               <argon-input
                 id="lastName"
                 v-model="formData.lastName"
-                @blur="validator.lastName.$touch()"
-                :error="isInvalid('lastName', validator)"
-                :success="isValid('lastName', validator)"
+                :validator="validator.lastName"
                 >Last name</argon-input
               >
             </div>
             <div class="col-12 col-md-6">
-              <argon-input id="email">Email</argon-input>
+              <argon-input
+                id="email"
+                type="email"
+                v-model="formData.email"
+                :validator="validator.email"
+                >Email</argon-input
+              >
             </div>
             <div class="col-12 col-md-6">
-              <argon-input id="phone">Phone</argon-input>
+              <argon-input
+                id="phone"
+                v-model="formData.phone"
+                :validator="validator.phone"
+                >Phone</argon-input
+              >
             </div>
+            <div class="col-12 col-md-6">
+              <div class="form-group">
+                <label for="" class="form-control-label">Gender</label>
+                <select class="form-control" v-model="formData.gender">
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-12 col-md-6">
               <div class="form-group">
                 <label for="example-text-input" class="form-control-label"
                   >Grades</label
                 >
-                <select class="form-control" multiple>
+                <select
+                  class="form-control"
+                  multiple
+                  v-model="formData.gradeIds"
+                >
                   <option
                     v-for="g in gradesStore.list"
                     :key="g.id"
@@ -131,7 +216,11 @@ const isValid = (k, validator) => {
                 <label for="example-text-input" class="form-control-label"
                   >Subjects</label
                 >
-                <select class="form-control" multiple v-model="formData.name">
+                <select
+                  class="form-control"
+                  multiple
+                  v-model="formData.subjectIds"
+                >
                   <option
                     v-for="g in subjectsStore.list"
                     :key="g.id"
@@ -141,23 +230,6 @@ const isValid = (k, validator) => {
                   </option>
                 </select>
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-body">
-          <h3 class="card-title">Account details</h3>
-          <hr />
-          <p class="card-text">
-            Add the username/email and password to create teacher account
-          </p>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <argon-input id="firstName">Username/Email</argon-input>
-            </div>
-            <div class="col-12 col-md-6">
-              <argon-input id="lastName" type="password">Password</argon-input>
             </div>
           </div>
         </div>

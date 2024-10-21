@@ -5,6 +5,8 @@ import CrudList from "@/components/CrudList.vue";
 import { useRoute } from "vue-router";
 import { useGradesStore } from "../store/grades";
 import { useToast } from "vue-toastification";
+import { helpers, required } from "@vuelidate/validators";
+import ArgonInput from "@/components/ArgonInput.vue";
 
 const toast = useToast();
 
@@ -40,7 +42,7 @@ const handleDelete = async (item) => {
     toast.error(response.error);
   } else {
     store.findAll(params.schoolId);
-    toast.info('Grade deleted!');
+    toast.info("Grade deleted!");
   }
 };
 
@@ -50,13 +52,17 @@ const handleSubmit = async (data) => {
   if (response.error) {
     toast.error(response.error);
   } else {
-    toast.success(
-      `Grade ${data.id > 0 ? "updated" : "created"} successfully!`
-    );
+    toast.success(`Grade ${data.id > 0 ? "updated" : "created"} successfully!`);
     store.findAll(params.schoolId);
     formOpen.value = false;
   }
   submitting.value = false;
+};
+
+const formValidations = {
+  name: {
+    required: helpers.withMessage("Name is required", required),
+  },
 };
 
 onMounted(() => store.findAll(params.schoolId));
@@ -79,18 +85,16 @@ onMounted(() => store.findAll(params.schoolId));
     :modelName="'Grade'"
     @onDelete="handleDelete"
     @onSubmit="handleSubmit"
-    @onFormOpen="() => (formOpen = true)"
+    @onFormOpen="() => formOpen = true"
+    :formValidationRules="formValidations"
   >
-    <template v-slot:form="{ formData }">
+    <template v-slot:form="{ formData, validator }">
       <div class="form-group">
-        <label for="example-text-input" class="form-control-label">Name</label>
-        <input
-          class="form-control"
-          type="text"
-          v-model="formData.name"
-          value=""
-          id="example-text-input"
-        />
+        <argon-input
+                id="name"
+                v-model="formData.name"
+                :validator="validator.name"
+                >Name</argon-input>
       </div>
       <div class="form-check">
         <input

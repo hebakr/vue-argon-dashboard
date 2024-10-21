@@ -7,6 +7,7 @@ import Brands from "../views/Brands.vue";
 import BrandDetails from "../views/BrandDetails.vue";
 import SchoolDashboard from "@/SchoolDashboard.vue";
 import schoolRoutes from "./school-routes";
+import AcceptInvitation from "../views/AcceptInvitation.vue";
 
 const routes = [
   {
@@ -49,6 +50,11 @@ const routes = [
         name: "signin",
         component: Signin,
       },
+      {
+        path: 'accept-invitation',
+        name: 'teacherInvite',
+        component: AcceptInvitation
+      }
     ],
   },
 ];

@@ -5,6 +5,7 @@
         <div class="card">
           <div class="card-header pb-0 d-flex justify-content-between">
             <h3>{{ title }}</h3>
+            <div><slot name="top-center" /></div>
             <div>
               <slot name="actions" />
             </div>

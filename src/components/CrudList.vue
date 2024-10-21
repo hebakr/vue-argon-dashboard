@@ -5,7 +5,7 @@ import AppDialog from "@/components/AppDialog.vue";
 import { useVuelidate } from "@vuelidate/core";
 import { useTemplateStore } from "../store/templateStore";
 
-const store = useTemplateStore()
+const store = useTemplateStore();
 
 const open = ref(false);
 const formData = ref(null);
@@ -38,12 +38,14 @@ const handleNew = () => {
   emit("onFormOpen");
   open.value = true;
   formData.value = { ...props.initialFormData };
+  v$.value.$reset();
 };
 
 const handleEdit = (item) => {
-  emit("onFormOpen");
+  emit("onFormOpen", item);
   open.value = true;
   formData.value = { ...item };
+  v$.value.$validate();
 };
 
 const handleDelete = (item) => {
@@ -57,16 +59,53 @@ const handleClose = () => {
 
 const handleSubmit = async () => {
   await v$.value.$validate();
-  console.log(v$.value);
 
   emit("onSubmit", formData.value);
 };
+
+const viewType = ref("table");
 
 const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
 </script>
 <template>
   <page-layout :title="props.title">
-    <template v-slot:actions>
+    <template #top-center>
+      <div class="btn-group" role="group">
+        <input
+          type="radio"
+          class="btn-check"
+          v-model="viewType"
+          value="table"
+          name="btnradio"
+          id="btnradio-table"
+          autocomplete="off"
+          :checked="viewType == 'table'"
+        />
+        <label class="btn btn-outline-default" 
+        :class="viewType=='table' ? 'active' : ''"
+
+        for="btnradio-table">
+          <i class="fa fa-table"></i
+        ></label>
+
+        <input
+          type="radio"
+          class="btn-check"
+          value="list"
+          v-model="viewType"
+          name="btnradio"
+          id="btnradio-grid"
+          autocomplete="off"
+          :checked="viewType == 'list'"
+        />
+        <label class="btn btn-outline-default"
+        :class="viewType==='list' ? 'active' : ''"
+         for="btnradio-grid"
+          ><i class="fa fa-list"></i
+        ></label>
+      </div>
+    </template>
+    <template #actions>
       <button class="btn btn-default" @click="handleNew">
         <i class="fa fa-plus"></i>
         <span class="d-none d-md-inline-block mx-1">{{
@@ -88,7 +127,10 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
                 c.formatter ? c.formatter(item[c.property]) : item[c.property]
               }}</span>
             </td>
-            <td class="px-4 py-2" :class="store.isRTL ? 'text-start' : 'text-end'">
+            <td
+              class="px-4 py-2"
+              :class="store.isRTL ? 'text-start' : 'text-end'"
+            >
               <a class="btn btn-default btn-xs" @click="() => handleEdit(item)">
                 <i class="fa fa-edit"></i>
               </a>
@@ -113,10 +155,10 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
   <app-dialog
     :title="`${props.modelName} details`"
     :open="open && props.formOpen"
-    v-if="formData"
+    v-if="open && formData"
     submit-title="Save"
     :loading="props.submitting"
-    :submitDisabled="false"
+    :submitDisabled="v$.$invalid"
     :formSize="props.formSize"
     @submitPressed="handleSubmit"
     @cancel="handleClose"
@@ -126,3 +168,9 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
     >
   </app-dialog>
 </template>
+
+<style scoped>
+.btn-outline-default.active {
+  background-color: lightblue;
+}
+</style>

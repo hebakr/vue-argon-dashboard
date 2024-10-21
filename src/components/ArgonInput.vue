@@ -1,18 +1,12 @@
 <script setup>
+import { computed } from "vue";
+
 const emit = defineEmits(["update:modelValue", "blur"]);
 
-defineProps({
+const props = defineProps({
   size: {
     type: String,
     default: "default",
-  },
-  success: {
-    type: Boolean,
-    default: false,
-  },
-  error: {
-    type: Boolean,
-    default: false,
   },
   icon: {
     type: String,
@@ -46,7 +40,22 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
+  validator: {
+    type: Object,
+    default: null,
+  },
 });
+
+const error = computed(
+  () => props.validator?.$dirty && props.validator?.$errors.length
+);
+const success = computed(
+  () => props.validator?.$dirty && props.validator?.$errors.length === 0
+);
 
 const getClasses = (size, success, error) => {
   let sizeValue, isValidValue;
@@ -79,15 +88,26 @@ const hasIcon = (icon) => (icon ? "input-group" : null);
         class="form-control"
         :class="getClasses(size, success, error)"
         :name="name"
+        :disabled="disabled"
         :value="modelValue"
         :placeholder="placeholder"
         :isRequired="isRequired"
         @input="emit('update:modelValue', $event.target.value)"
-        @blur="emit('blur')"
+        @blur="validator?.$validate()"
       />
       <span v-if="iconDir === 'right'" class="input-group-text">
         <i :class="getIcon(icon)"></i>
       </span>
+      <div class="invalid-feedback error-message">
+        <div v-for="error in validator?.$errors" :key="error.$uid">
+          {{ error.$message }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
+<style scoped>
+  .error-message {
+    font-size: 0.75em;
+  }
+</style>
