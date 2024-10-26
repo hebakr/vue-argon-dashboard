@@ -1,7 +1,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import CrudList from "@/components/CrudList.vue";
+import CrudList from "@/components/CrudList";
 import { useRoomsStore } from "../store/class-rooms";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
@@ -19,6 +19,7 @@ const columns = [
   {
     head: "Name",
     property: "name",
+    showAction: true,
   },
   {
     head: "Status",
@@ -38,9 +39,7 @@ const handleSubmit = async (data) => {
   if (response.error) {
     toast.error(response.error);
   } else {
-    toast.success(
-      `Room ${data.id > 0 ? "updated" : "created"} successfully!`
-    );
+    toast.success(`Room ${data.id > 0 ? "updated" : "created"} successfully!`);
     store.findAll(params.schoolId);
     formOpen.value = false;
   }

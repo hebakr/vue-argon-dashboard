@@ -51,11 +51,11 @@ export const useSchoolsStore = defineStore({
       );
       await this.fetchSchools(brandId);
     },
-    async isUserExist(email, schoolId, teacherId) {
+    async isUserExist(email, schoolId, role, userId) {
       const response = await request(
         `${config.baseUrl}api/v1/schools/${schoolId}/find-user`,
         "POST",
-        snakecaseKeys({ email, teacherId })
+        snakecaseKeys({ email, userId, role })
       );
       if (response.data) return true;
 
@@ -115,6 +115,14 @@ export const useSchoolsStore = defineStore({
               },
               title: "nav.classRooms",
               icon: '<i class="fa fa-building text-primary text-lg opacity-8"></i>',
+            },
+            {
+              route: {
+                name: "configurations",
+                params: { schoolId: state.currentSchool?.id || 0 },
+              },
+              title: "nav.configurations",
+              icon: '<i class="fa fa-gear text-primary text-lg opacity-8"></i>',
             },
           ];
     },

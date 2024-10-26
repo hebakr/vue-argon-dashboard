@@ -1,7 +1,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import CrudList from "@/components/CrudList.vue";
+import CrudList from "@/components/CrudList";
 import { useRoute } from "vue-router";
 import { useGradesStore } from "../store/grades";
 import { useToast } from "vue-toastification";
@@ -85,16 +85,17 @@ onMounted(() => store.findAll(params.schoolId));
     :modelName="'Grade'"
     @onDelete="handleDelete"
     @onSubmit="handleSubmit"
-    @onFormOpen="() => formOpen = true"
+    @onFormOpen="() => (formOpen = true)"
     :formValidationRules="formValidations"
   >
     <template v-slot:form="{ formData, validator }">
       <div class="form-group">
         <argon-input
-                id="name"
-                v-model="formData.name"
-                :validator="validator.name"
-                >Name</argon-input>
+          id="name"
+          v-model="formData.name"
+          :validator="validator.name"
+          >Name</argon-input
+        >
       </div>
       <div class="form-check">
         <input

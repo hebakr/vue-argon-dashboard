@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import axios from "axios";
-import config from "../util/config";
-import { request } from "../util/request-api";
+import config from "@/util/config";
+import { request } from "@/util/request-api";
 import camelcaseKeys from "camelcase-keys";
 import snakecaseKeys from "snakecase-keys";
 
@@ -26,11 +26,9 @@ export const useAuthStore = defineStore({
         if (response.status === 200) {
           this.accessToken = response.headers?.authorization;
           localStorage.setItem("authToken", response.headers?.authorization);
-          localStorage.setItem(
-            "currentUser",
-            JSON.stringify(response.data?.user)
-          );
-          // setAuthorizationHeader(response.headers?.authorization);
+          const user = camelcaseKeys(response.data?.user);
+          user.memberships = camelcaseKeys(response.data?.memberships);
+          localStorage.setItem("currentUser", JSON.stringify(user));
         }
       } catch (ex) {
         console.log(ex);
@@ -51,7 +49,7 @@ export const useAuthStore = defineStore({
       const response = await axios.get(
         `${config.baseUrl}invitations?teacherId=${teacherId}`
       );
-      return camelcaseKeys(response.data);
+      return camelcaseKeys(response.data, { deep: true });
     },
 
     async createTeacherAccount(data) {
@@ -63,17 +61,34 @@ export const useAuthStore = defineStore({
         return camelcaseKeys(response.data);
       } catch (error) {
         console.log("ERROR", error.response.data.error);
-        
+
         return { error: true, message: error.response.data.error };
       }
     },
     updateBoard(board) {
       this.board = board;
     },
+
+    async updateLastSchool(schoolId) {
+      await request(
+        `${config.baseUrl}api/v1/users/update_last_school`,
+        "POST",
+        {
+          school_id: schoolId,
+        }
+      );
+      localStorage.setItem(
+        "currentUser",
+        JSON.stringify({ ...this.currentUser, lastVisitedSchool: schoolId })
+      );
+    },
   },
   getters: {
     isLoggedIn: (state) => !!state.accessToken || !!localStorage.authToken,
     token: () => localStorage.authToken,
     currentUser: () => JSON.parse(localStorage.currentUser),
+    isSuperAdmin: (state) => state.currentUser.roles.includes("super_admin"),
+    isTeacher: (state) => state.currentUser.roles.includes("teacher"),
+    isStudent: (state) => state.currentUser.roles.includes("student"),
   },
 });

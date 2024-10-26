@@ -1,6 +1,11 @@
 <script setup>
+const model = defineModel();
 defineProps({
   name: {
+    type: String,
+    required: true,
+  },
+  value: {
     type: String,
     required: true,
   },
@@ -15,13 +20,14 @@ defineProps({
 });
 </script>
 <template>
-  <div class="form-check">
+  <div class="form-check form-check-inline">
     <input
       :id="id"
       class="form-check-input"
       type="radio"
+      v-model="model"
       :name="name"
-      :checked="checked"
+      :value="value"
     />
     <label class="custom-control-label" :for="id">
       <slot />

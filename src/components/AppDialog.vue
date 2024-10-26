@@ -29,6 +29,10 @@ const props = defineProps({
     type: String,
     default: "default",
   },
+  isRTL: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const handleClose = () => {
@@ -64,6 +68,7 @@ const getSize = () => {
             <button
               type="button"
               class="btn-close"
+              :class="isRTL ? 'modal-header-btn-rtl' : ''"
               data-bs-dismiss="modal"
               aria-label="Close"
               @click="handleClose"
@@ -129,5 +134,9 @@ const getSize = () => {
 }
 .btn-close:hover {
   color: black;
+}
+
+.modal-header .modal-header-btn-rtl {
+  margin: auto -0.5rem -0.5rem -0.5rem;
 }
 </style>

@@ -13,12 +13,12 @@ export const buildCrudStore = (id) => {
       loading: false,
     }),
     actions: {
-      async findAll(schoolId) {
+      async findAll(schoolId, page = 1, query = '') {
         this.loading = true;
         const response = await request(
-          `${config.baseUrl}/api/v1/schools/${schoolId}/${id}`
+          `${config.baseUrl}/api/v1/schools/${schoolId}/${id}?page=${page}&query=${query}`
         );
-        this.list = camelcaseKeys(response.data);
+        this.list = camelcaseKeys(response.data, { deep: true });
         this.loading = false;
       },
       async create(model) {

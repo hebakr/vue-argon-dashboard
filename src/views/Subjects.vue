@@ -1,7 +1,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import CrudList from "@/components/CrudList.vue";
+import CrudList from "@/components/CrudList";
 import { useSubjectsStore } from "../store/subjects";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";

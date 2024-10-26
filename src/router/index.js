@@ -20,7 +20,16 @@ const routes = [
     children: [
       {
         path: "",
-        redirect: { name: "Brands" },
+        redirect: () => {
+          const store = useAuthStore();
+
+          if (store.currentUser.roles?.includes("super_admin"))
+            return { name: "Brands" };
+          else {
+            const schoolId = store.currentUser.lastVisitedSchool || store.currentUser.memberships[0].schoolId;
+            return { name: "dashboard", params: { schoolId } };
+          }
+        },
       },
       {
         path: "brands",
@@ -51,10 +60,10 @@ const routes = [
         component: Signin,
       },
       {
-        path: 'accept-invitation',
-        name: 'teacherInvite',
-        component: AcceptInvitation
-      }
+        path: "accept-invitation",
+        name: "teacherInvite",
+        component: AcceptInvitation,
+      },
     ],
   },
 ];
@@ -69,7 +78,7 @@ router.beforeEach((to, _, next) => {
   document.title = to.meta.title || "School board";
   // console.log(to)
   const store = useAuthStore();
-  if (!store.isLoggedIn && to.name !== 'signin') location.href = "/auth/signin";
+  if (!store.isLoggedIn && to.name !== "signin") location.href = "/auth/signin";
   else next();
 });
 

@@ -24,6 +24,7 @@ const i18n = createI18n({
         subjects: "Subjects",
         classRooms: "Class Rooms",
         grades: "Grades",
+        configurations: "Configurations",
       },
       teacher: {
         firstName: "Hello world",

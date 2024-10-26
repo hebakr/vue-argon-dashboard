@@ -1,7 +1,7 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-import CrudList from "@/components/CrudList.vue";
+import CrudList from "@/components/CrudList";
 import { useGradesStore } from "../store/grades";
 import { useRoute } from "vue-router";
 import ArgonInput from "@/components/ArgonInput.vue";
@@ -82,6 +82,10 @@ const handleSubmit = async (data) => {
   submitting.value = false;
 };
 
+const handlePageChanged = (page) => {
+  store.findAll(params.schoolId, page);
+};
+
 onMounted(() => gradesStore.findAll(params.schoolId));
 onMounted(() => subjectsStore.findAll(params.schoolId));
 onMounted(() => store.findAll(params.schoolId));
@@ -92,11 +96,11 @@ const phone = helpers.regex(
 
 const { withAsync } = helpers;
 const uniqueEmail = withAsync(async (value) => {
-  console.log('uniqueEmail', email)
-  const exists = await schoolsStore.isUserExist(
+  const exists =  await schoolsStore.isUserExist(
     value,
     params.schoolId,
-    teacherToEdit.value?.id
+    "teacher",
+    teacherToEdit.value?.userId
   );
 
   return !exists;
@@ -130,22 +134,24 @@ const formValidations = {
     actionTitle="Add Teacher"
     title="Teachers"
     :columns="columns"
-    :data="store.list"
+    :data="store.list.collection"
+    :metadata="store.list.metadata"
     :initialFormData="initialFormData"
     :submitting="submitting"
     :formValidationRules="formValidations"
     :formOpen="formOpen"
     :modelName="'Teacher'"
+    :loading="store.loading"
     @onDelete="handleDelete"
     @onFormOpen="handleEdit"
     @onSubmit="handleSubmit"
+    @pageChanged="handlePageChanged"
     formSize="xl"
   >
     <template #form="{ formData, validator }">
       <div class="card">
         <div class="card-body">
           <h3 class="card-title">Teacher information</h3>
-          <p class="card-text"></p>
           <div class="row">
             <div class="col-12 col-md-6">
               <argon-input

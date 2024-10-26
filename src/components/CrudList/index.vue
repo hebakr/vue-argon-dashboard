@@ -1,9 +1,10 @@
 <script setup>
 import { ref } from "vue";
-import PageLayout from "./PageLayout.vue";
+import PageLayout from "../PageLayout.vue";
+import CrudTable from "./CrudTable.vue";
 import AppDialog from "@/components/AppDialog.vue";
 import { useVuelidate } from "@vuelidate/core";
-import { useTemplateStore } from "../store/templateStore";
+import { useTemplateStore } from "@/store/templateStore";
 
 const store = useTemplateStore();
 
@@ -15,10 +16,15 @@ const props = defineProps({
   actionTitle: String,
   modelName: String,
   submitting: Boolean,
+  loading: Boolean,
   formOpen: Boolean,
   data: {
     type: Array,
     required: true,
+  },
+  metadata: {
+    type: Object,
+    required: false,
   },
   columns: {
     type: Array,
@@ -65,7 +71,7 @@ const handleSubmit = async () => {
 
 const viewType = ref("table");
 
-const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
+const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen", "pageChanged"]);
 </script>
 <template>
   <page-layout :title="props.title">
@@ -81,10 +87,12 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
           autocomplete="off"
           :checked="viewType == 'table'"
         />
-        <label class="btn btn-outline-default" 
-        :class="viewType=='table' ? 'active' : ''"
-
-        for="btnradio-table">
+        <label
+          class="btn btn-outline-default"
+          :class="viewType == 'table' ? 'active' : ''"
+          for="btnradio-table"
+          title="Table view"
+        >
           <i class="fa fa-table"></i
         ></label>
 
@@ -98,10 +106,12 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
           autocomplete="off"
           :checked="viewType == 'list'"
         />
-        <label class="btn btn-outline-default"
-        :class="viewType==='list' ? 'active' : ''"
-         for="btnradio-grid"
-          ><i class="fa fa-list"></i
+        <label
+          class="btn btn-outline-default"
+          :class="viewType === 'list' ? 'active' : ''"
+          for="btnradio-grid"
+          title="Grid view"
+          ><i class="fa fa-qrcode"></i
         ></label>
       </div>
     </template>
@@ -113,44 +123,31 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
         }}</span>
       </button>
     </template>
+    <div class="loading-data d-flex justify-content-center" v-if="loading">
+      <div class="spinner-grow text-secondary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div class="spinner-grow text-secondary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div class="spinner-grow text-secondary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
 
-    <div class="table-responsive p-0" v-if="data?.length > 0">
-      <table class="table align-items-center justify-content-center mb-0">
-        <thead>
-          <th v-for="c in props.columns" :key="c.property">{{ c.head }}</th>
-          <th></th>
-        </thead>
-        <tbody>
-          <tr v-for="item in data" :key="item.id">
-            <td v-for="c in props.columns" :key="c.property" class="px-4 py-3">
-              <span class="text-sm font-weight-bold">{{
-                c.formatter ? c.formatter(item[c.property]) : item[c.property]
-              }}</span>
-            </td>
-            <td
-              class="px-4 py-2"
-              :class="store.isRTL ? 'text-start' : 'text-end'"
-            >
-              <a class="btn btn-default btn-xs" @click="() => handleEdit(item)">
-                <i class="fa fa-edit"></i>
-              </a>
-              <a
-                class="btn btn-danger btn-xs"
-                @click="() => handleDelete(item)"
-              >
-                <i class="fa fa-trash"></i>
-              </a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="container text-center" v-else>
-      No {{ title }} available,
-      <a href="javascript:;" class="text-primary" @click="handleNew"
-        >Add {{ modelName }}</a
-      >
-    </div>
+    <crud-table
+      v-else
+      :title="title"
+      :modelName="modelName"
+      :loading="loading"
+      :data="data"
+      :metadata="metadata"
+      :columns="columns"
+      @onNew="handleNew"
+      @onDelete="handleDelete"
+      @onEdit="handleEdit"
+      @pageChanged="(page) => emit('pageChanged', page)"
+    />
   </page-layout>
   <app-dialog
     :title="`${props.modelName} details`"
@@ -162,6 +159,7 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
     :formSize="props.formSize"
     @submitPressed="handleSubmit"
     @cancel="handleClose"
+    :isRTL="store.isRTL"
   >
     <slot name="form" :formData="formData" :validator="v$"
       >Add form here!{{ formData }}</slot
@@ -172,5 +170,9 @@ const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen"]);
 <style scoped>
 .btn-outline-default.active {
   background-color: lightblue;
+}
+
+.loading-data {
+  margin: 50px auto;
 }
 </style>

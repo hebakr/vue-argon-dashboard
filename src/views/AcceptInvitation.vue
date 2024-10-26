@@ -16,16 +16,16 @@ const token = computed(() => {
   return urlParams.get("token");
 });
 
-const teacherId = computed(() => {
-  return urlParams.get("teacherId");
-});
+const teacherId = computed(() => urlParams.get("teacherId"));
+const schoolId = computed(() => urlParams.get("schoolId"));
+
 
 const handleSubmit = async () => {
   formData.value.token = token.value;
   formData.value.teacherId = teacherId.value;
+  formData.value.schoolId = schoolId.value;
 
   const response = await store.createTeacherAccount(formData.value);
-  console.log("response", response);
 
   if (response.error) {
     toast.error(response.message);

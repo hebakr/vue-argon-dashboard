@@ -1,14 +1,19 @@
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, onBeforeMount } from "vue";
 import { useTemplateStore } from "@/store/templateStore";
 const templateStore = useTemplateStore();
 import { useBrandsStore } from "@/store/brands";
 import PageLayout from "../components/PageLayout.vue";
 import { useRoute } from "vue-router";
 
-templateStore.showSidenav = false;
-templateStore.hideConfigButton = true;
+onBeforeMount(() => {
+  templateStore.showNavbar = false;
+  templateStore.showSidenav = false;
+  templateStore.showFooter = false;
+  templateStore.hideConfigButton = true;
+});
+
 const store = useBrandsStore();
 const route = useRoute();
 onMounted(() => store.fetchBrand(route.params.brandId));

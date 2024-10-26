@@ -13,9 +13,13 @@ const router = useRouter();
 
 async function handleLogin() {
   await store.login(userLogin.email, userLogin.password);
-  if (store.isLoggedIn) router.push("/");
+  if (store.isLoggedIn) redirect();
   else errorLogin.value = !store.isLoggedIn;
 }
+
+const redirect = () => {
+  router.push("/");
+};
 </script>
 <template>
   <div class="container top-0 position-sticky z-index-sticky">

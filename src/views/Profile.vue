@@ -19,7 +19,7 @@ onMounted(() => {
 });
 onBeforeMount(() => {
   store.imageLayout = "profile-overview";
-  store.showNavbar = false;
+  store.showNavbar = true;
   store.showFooter = true;
   store.hideConfigButton = true;
   body.classList.add("profile-overview");
@@ -44,7 +44,6 @@ onBeforeUnmount(() => {
           margin-left: -34%;
         "
       >
-        <span class="mask bg-gradient-success opacity-6"></span>
       </div>
       <div class="card shadow-lg mt-n6">
         <div class="card-body p-3">

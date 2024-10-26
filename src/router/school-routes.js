@@ -1,6 +1,8 @@
 import ClassRooms from "../views/ClassRooms.vue";
-import Dashboard from "../views/Dashboard.vue";
+import Configurations from "../views/Configurations.vue";
+import Dashboard from "../views/Dashboard";
 import Grades from "../views/Grades";
+import Profile from "../views/Profile.vue";
 import Students from "../views/Students.vue";
 import Subjects from "../views/Subjects.vue";
 import Teachers from "../views/Teachers.vue";
@@ -39,6 +41,16 @@ const routes = [
     path: "class-rooms",
     name: "class-rooms",
     component: ClassRooms,
+  },
+  {
+    path: "configurations",
+    name: "configurations",
+    component: Configurations,
+  },
+  {
+    path: "profile",
+    name: "profile",
+    component: Profile,
   },
 ];
 
