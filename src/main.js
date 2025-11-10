@@ -23,6 +23,7 @@ const i18n = createI18n({
         teachers: "Teachers",
         subjects: "Subjects",
         classRooms: "Class Rooms",
+        classes: "Classes",
         grades: "Grades",
         configurations: "Configurations",
       },

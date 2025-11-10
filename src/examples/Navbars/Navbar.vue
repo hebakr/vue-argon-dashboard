@@ -3,9 +3,11 @@ import { computed, ref } from "vue";
 import { useTemplateStore } from "@/store/templateStore";
 import { useRoute } from "vue-router";
 import Breadcrumbs from "../Breadcrumbs.vue";
+import AcademicYearSelector from "./AcademicYearSelector"
 
 const showMenu = ref(false);
 const store = useTemplateStore();
+
 const isRTL = computed(() => store.isRTL);
 
 const route = useRoute();
@@ -51,20 +53,12 @@ const closeMenu = () => {
           class="pe-md-3 d-flex align-items-center"
           :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
-          <div class="input-group">
-            <span class="input-group-text text-body">
-              <i class="fas fa-search" aria-hidden="true"></i>
-            </span>
-            <input
-              type="text"
-              class="form-control"
-              :placeholder="isRTL ? 'أكتب هنا...' : 'Type here...'"
-            />
-          </div>
+          <academic-year-selector />
         </div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
             <router-link
+              v-if="route.params.schoolId"
               :to="{
                 name: 'profile',
                 params: { schoolId: route.params.schoolId },

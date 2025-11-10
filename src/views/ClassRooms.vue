@@ -2,7 +2,7 @@
 <script setup>
 import { onMounted, ref } from "vue";
 import CrudList from "@/components/CrudList";
-import { useRoomsStore } from "../store/class-rooms";
+import { useClassRoomsStore } from "../store/class-rooms";
 import { useRoute } from "vue-router";
 import { useToast } from "vue-toastification";
 
@@ -45,8 +45,15 @@ const handleSubmit = async (data) => {
   }
   submitting.value = false;
 };
+const fd = { name: "", active: true, schoolId: params.schoolId };
+const initialFormData = ref(fd);
 
-const store = useRoomsStore();
+const handleFormOpen = (item) => {
+  formOpen.value = true;
+  initialFormData.value = item == null ? { ...fd } : { ...item };
+};
+
+const store = useClassRoomsStore();
 onMounted(() => store.findAll(params.schoolId));
 </script>
 
@@ -56,13 +63,13 @@ onMounted(() => store.findAll(params.schoolId));
     title="Class rooms"
     :columns="columns"
     :data="store.list"
-    :initialFormData="{ name: '', active: true, schoolId: params.schoolId }"
+    :initialFormData="initialFormData"
     :submitting="submitting"
     :formOpen="formOpen"
     :modelName="'Class Room'"
     @onDelete="handleDelete"
     @onSubmit="handleSubmit"
-    @onFormOpen="() => (formOpen = true)"
+    @onFormOpen="handleFormOpen"
   >
     <template v-slot:form="{ formData }">
       <div class="form-group">

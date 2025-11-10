@@ -59,6 +59,19 @@ const handleSubmit = async (data) => {
   submitting.value = false;
 };
 
+const fd = {
+  name: "",
+  section: "primary",
+  active: true,
+  schoolId: params.schoolId,
+};
+const initialFormData = ref(fd);
+
+const handleFormOpen = (item) => {
+  formOpen.value = true;
+  initialFormData.value = item == null ? { ...fd } : { ...item };
+};
+
 const formValidations = {
   name: {
     required: helpers.withMessage("Name is required", required),
@@ -74,18 +87,13 @@ onMounted(() => store.findAll(params.schoolId));
     actionTitle="Add Grade"
     :columns="columns"
     :data="store.list"
-    :initialFormData="{
-      name: '',
-      section: 'primary',
-      active: true,
-      schoolId: params.schoolId,
-    }"
+    :initialFormData="initialFormData"
     :submitting="submitting"
     :formOpen="formOpen"
     :modelName="'Grade'"
     @onDelete="handleDelete"
     @onSubmit="handleSubmit"
-    @onFormOpen="() => (formOpen = true)"
+    @onFormOpen="handleFormOpen"
     :formValidationRules="formValidations"
   >
     <template v-slot:form="{ formData, validator }">

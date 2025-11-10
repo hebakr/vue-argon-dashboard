@@ -13,8 +13,9 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 -->
 <script setup>
+// "vue/no-multiple-template-root": "off",
 import { computed } from "vue";
-import { useTemplateStore } from "./store/templateStore";
+import { useTemplateStore } from "@/store/templateStore";
 import Sidenav from "./examples/Sidenav";
 import Configurator from "@/examples/Configurator.vue";
 import Navbar from "@/examples/Navbars/Navbar.vue";
@@ -44,27 +45,29 @@ const navClasses = computed(() => {
 });
 </script>
 <template>
-  <div
-    v-show="layout === 'landing'"
-    class="landing-bg h-100 bg-gradient-primary position-fixed w-100"
-  ></div>
+  <div>
+    <div
+      v-show="layout === 'landing'"
+      class="landing-bg h-100 bg-gradient-primary position-fixed w-100"
+    ></div>
 
-  <sidenav v-if="showSidenav" />
+    <sidenav v-if="showSidenav" />
 
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-  >
-    <!-- nav -->
+    <main
+      class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
+    >
+      <!-- nav -->
 
-    <navbar :class="[navClasses]" v-if="showNavbar" />
+      <navbar :class="[navClasses]" v-if="showNavbar" />
 
-    <router-view />
+      <router-view />
 
-    <app-footer v-show="showFooter" />
+      <app-footer v-show="showFooter" />
 
-    <configurator
-      :toggle="toggleConfigurator"
-      :class="[showConfig ? 'show' : '', hideConfigButton ? 'd-none' : '']"
-    />
-  </main>
+      <configurator
+        :toggle="toggleConfigurator"
+        :class="[showConfig ? 'show' : '', hideConfigButton ? 'd-none' : '']"
+      />
+    </main>
+  </div>
 </template>

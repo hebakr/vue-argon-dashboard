@@ -1,14 +1,15 @@
 import { defineStore } from "pinia";
-import config from "../util/config";
 import camelcaseKeys from "camelcase-keys";
-import { request } from "../util/request-api";
 import snakecaseKeys from "snakecase-keys";
+import config from "@/util/config";
+import { request } from "@/util/request-api";
 
 export const useSchoolsStore = defineStore({
   id: "schools",
   state: () => ({
     schools: [],
     currentSchool: null,
+    activeYear: 0,
     loading: false,
   }),
   actions: {
@@ -26,6 +27,7 @@ export const useSchoolsStore = defineStore({
       const response = await request(`${config.baseUrl}api/v1/schools/${id}`);
 
       this.currentSchool = camelcaseKeys(response.data);
+      this.activeYear = this.currentYear?.id;
       this.loading = false;
     },
     async create(brandId, data) {
@@ -60,6 +62,10 @@ export const useSchoolsStore = defineStore({
       if (response.data) return true;
 
       return false;
+    },
+
+    setActiveYear(id) {
+      this.activeYear = id;
     },
   },
 
@@ -110,6 +116,14 @@ export const useSchoolsStore = defineStore({
             },
             {
               route: {
+                name: "classes",
+                params: { schoolId: state.currentSchool?.id || 0 },
+              },
+              title: "nav.classes",
+              icon: '<i class="fa fa-building text-primary text-lg opacity-8"></i>',
+            },
+            {
+              route: {
                 name: "class-rooms",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
@@ -125,6 +139,12 @@ export const useSchoolsStore = defineStore({
               icon: '<i class="fa fa-gear text-primary text-lg opacity-8"></i>',
             },
           ];
+    },
+    currentYear: (state) => {
+      return (
+        state.currentSchool?.academicYears.find((x) => x.current) ||
+        state.currentSchool?.academicYears[0]
+      );
     },
   },
 });

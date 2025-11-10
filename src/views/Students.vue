@@ -4,31 +4,63 @@ import { computed, onMounted, reactive, ref } from "vue";
 import StudentForm from "./components/students/StudentForm.vue";
 import { useRoute } from "vue-router";
 import CrudList from "@/components/CrudList";
-import { useStudentsStore } from "../store/students";
+import { useStudentsStore } from "@/store/students";
 import { required, email, helpers, requiredIf } from "@vuelidate/validators";
+import { useSchoolsStore } from "@/store/schools";
+import { useToast } from "vue-toastification";
+const schoolsStore = useSchoolsStore();
 
 const formOpen = ref(true);
+const submitting = ref(false);
+const toast = useToast();
 
 const otherParent = computed(() => initialFormData.gardianParent == "other");
+const activeStudent = computed(
+  () => initialFormData.student.status == "active"
+);
 const initialFormData = reactive({
+  schoolId: 1,
   gardianParent: "father",
+  test: "test",
   student: {
-    firstName: "a",
-    lastName: "b",
+    firstName: "",
+    lastName: "",
+    gradeId: "",
+    academicClassId: "",
+    gender: "",
+    relegion: "muslim",
+    status: "",
+    academicYearId: "",
   },
   father: {
-    firstName: "parent first name",
-    lastName: "b",
+    firstName: "",
+    lastName: "",
   },
   mother: {
-    firstName: "mother first name",
-    lastName: "b",
+    firstName: "",
+    lastName: "",
   },
   gardian: {},
 });
 
+const handleEdit = () => {
+  initialFormData.student.academicYear = schoolsStore.currentYear?.id;
+};
 const handleSubmit = async (data) => {
-  console.log(data);
+  submitting.value = true;
+  const response = await store.save(data);
+  console.log(response);
+  if (response.error) {
+    toast.error(response.error);
+  } else {
+    toast.success(
+      // `Teacher ${data.id > 0 ? "updated" : "created"} successfully!`
+      `Teacher created successfully!`
+    );
+    store.findAll(params.schoolId);
+    formOpen.value = false;
+  }
+  submitting.value = false;
 };
 
 const formValidations = {
@@ -39,9 +71,24 @@ const formValidations = {
     lastName: {
       required: helpers.withMessage("Last name is required", required),
     },
-    email: {
+    birthdate: { required },
+    gradeId: {
       required,
-      email,
+    },
+    gender: {
+      required,
+    },
+    academicClassId: {
+      required: helpers.withMessage(
+        "Please select class to enroll student",
+        requiredIf(activeStudent)
+      ),
+    },
+    academicYearId: {
+      required: helpers.withMessage(
+        "Please select academic year to enroll student",
+        requiredIf(activeStudent)
+      ),
     },
   },
   father: {

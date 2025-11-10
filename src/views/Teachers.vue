@@ -21,11 +21,6 @@ const store = useTeachersStore();
 const gradesStore = useGradesStore();
 const subjectsStore = useSubjectsStore();
 const schoolsStore = useSchoolsStore();
-const initialFormData = {
-  schoolId: params.schoolId,
-  gender: "male",
-  status: true,
-};
 
 const columns = [
   {
@@ -61,9 +56,18 @@ const handleDelete = async (item) => {
   }
 };
 
-const handleEdit = (item) => {
-  teacherToEdit.value = item;
+const fd = {
+  schoolId: params.schoolId,
+  gender: "male",
+  status: true,
+};
+const initialFormData = ref(fd);
+
+const handleFormOpen = (item) => {
+  console.log(item);
   formOpen.value = true;
+  initialFormData.value = item == null ? { ...fd } : { ...item };
+  teacherToEdit.value = item;
 };
 
 const handleSubmit = async (data) => {
@@ -96,7 +100,7 @@ const phone = helpers.regex(
 
 const { withAsync } = helpers;
 const uniqueEmail = withAsync(async (value) => {
-  const exists =  await schoolsStore.isUserExist(
+  const exists = await schoolsStore.isUserExist(
     value,
     params.schoolId,
     "teacher",
@@ -143,7 +147,7 @@ const formValidations = {
     :modelName="'Teacher'"
     :loading="store.loading"
     @onDelete="handleDelete"
-    @onFormOpen="handleEdit"
+    @onFormOpen="handleFormOpen"
     @onSubmit="handleSubmit"
     @pageChanged="handlePageChanged"
     formSize="xl"

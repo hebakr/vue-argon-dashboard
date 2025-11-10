@@ -1,3 +1,4 @@
+import Classes from "../views/Classes.vue";
 import ClassRooms from "../views/ClassRooms.vue";
 import Configurations from "../views/Configurations.vue";
 import Dashboard from "../views/Dashboard";
@@ -41,6 +42,11 @@ const routes = [
     path: "class-rooms",
     name: "class-rooms",
     component: ClassRooms,
+  },
+  {
+    path: "classes",
+    name: "classes",
+    component: Classes,
   },
   {
     path: "configurations",

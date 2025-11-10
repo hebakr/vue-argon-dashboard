@@ -9,7 +9,8 @@ import { useToast } from "vue-toastification";
 const toast = useToast();
 const store = useSubjectsStore();
 const { params } = useRoute();
-
+const fd = { name: "", active: true, schoolId: params.schoolId };
+const initialFormData = ref(fd);
 const submitting = ref(false);
 const formOpen = ref(true);
 
@@ -35,6 +36,11 @@ const handleDelete = async (item) => {
   toast("Subject deleted");
 };
 
+const handleFormOpen = (item) => {
+  formOpen.value = true;
+  initialFormData.value = (item == null) ? {...fd} : {...item};
+};
+
 const handleSubmit = async (data) => {
   const response = await store.save(data);
   if (response.error) {
@@ -58,13 +64,13 @@ onMounted(() => store.findAll(params.schoolId));
     :title="$t('subjects.title')"
     :columns="columns"
     :data="store.list"
-    :initialFormData="{ name: '', active: true, schoolId: params.schoolId }"
+    :initialFormData="initialFormData"
     :submitting="submitting"
     :formOpen="formOpen"
     :modelName="'Subject'"
     @onDelete="handleDelete"
     @onSubmit="handleSubmit"
-    @onFormOpen="() => (formOpen = true)"
+    @onFormOpen="handleFormOpen"
   >
     <template v-slot:form="{ formData }">
       <div class="form-group">

@@ -47,10 +47,10 @@ const handleNew = () => {
   v$.value.$reset();
 };
 
-const handleEdit = (item) => {
-  emit("onFormOpen", item);
+const handleEdit = async (item) => {
+  await emit("onFormOpen", item);
   open.value = true;
-  formData.value = { ...item };
+  formData.value = { ...props.initialFormData };
   v$.value.$validate();
 };
 
@@ -71,7 +71,13 @@ const handleSubmit = async () => {
 
 const viewType = ref("table");
 
-const emit = defineEmits(["onDelete", "onSubmit", "onFormOpen", "pageChanged"]);
+const emit = defineEmits([
+  "onDelete",
+  "onEdit",
+  "onSubmit",
+  "onFormOpen",
+  "pageChanged",
+]);
 </script>
 <template>
   <page-layout :title="props.title">

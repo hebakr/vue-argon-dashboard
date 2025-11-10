@@ -1,3 +1,3 @@
 import { buildCrudStore } from "./store-builder";
 
-export const useRoomsStore = buildCrudStore('class_rooms');
+export const useClassRoomsStore = buildCrudStore('class_rooms');
