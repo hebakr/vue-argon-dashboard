@@ -1,3 +1,4 @@
+import ClassDetails from "../views/ClassDetails.vue";
 import Classes from "../views/Classes.vue";
 import ClassRooms from "../views/ClassRooms.vue";
 import Configurations from "../views/Configurations.vue";
@@ -47,6 +48,11 @@ const routes = [
     path: "classes",
     name: "classes",
     component: Classes,
+  },
+  {
+    path: "classes/:id",
+    name: "classDetails",
+    component: ClassDetails,
   },
   {
     path: "configurations",

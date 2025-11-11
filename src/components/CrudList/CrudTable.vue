@@ -24,11 +24,19 @@ defineProps({
 });
 
 const emit = defineEmits(["onDelete", "onEdit", "pageChanged", "onNew"]);
+
+const buildUrl = (item) => {
+  const path = new URL(window.location.href).pathname;
+  if (path.endsWith("/")) return item.id;
+
+  const parts = path.split("/");
+  return `${parts[parts.length - 1]}/${item.id}`;
+};
 </script>
 <template>
   <!-- <div class="table-responsive p-0" v-if="data?.length > 0"> -->
-    <div class="p-0" v-if="data?.length > 0">
-      <table class="table align-items-center justify-content-center mb-0">
+  <div class="p-0" v-if="data?.length > 0">
+    <table class="table align-items-center justify-content-center mb-0">
       <thead>
         <th
           v-for="c in columns"
@@ -43,9 +51,11 @@ const emit = defineEmits(["onDelete", "onEdit", "pageChanged", "onNew"]);
         <tr v-for="item in data" :key="item.id">
           <td v-for="c in columns" :key="c.property" class="px-4 text-xs py-3">
             <span class="text-sm font-weight-bold">
-              <router-link :to="`${item.id}`" v-if="c.showAction">{{
-                c.formatter ? c.formatter(item[c.property]) : item[c.property]
-              }}</router-link>
+              <router-link :to="buildUrl(item)" v-if="c.action"
+                >{{
+                  c.formatter ? c.formatter(item[c.property]) : item[c.property]
+                }}
+              </router-link>
               <span v-else>
                 {{
                   c.formatter ? c.formatter(item[c.property]) : item[c.property]

@@ -20,6 +20,7 @@ const columns = [
   {
     head: "Title",
     property: "title",
+    action: "enrollments",
   },
   {
     head: "Capacity",

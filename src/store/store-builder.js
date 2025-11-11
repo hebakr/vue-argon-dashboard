@@ -5,7 +5,7 @@ import camelcaseKeys from "camelcase-keys";
 import { request } from "../util/request-api";
 import snakecaseKeys from "snakecase-keys";
 
-export const buildCrudStore = (id) => {
+export const buildCrudStore = (id, extraActions = {}) => {
   return defineStore({
     id: id,
     state: () => ({
@@ -13,11 +13,14 @@ export const buildCrudStore = (id) => {
       loading: false,
     }),
     actions: {
-      async findAll(schoolId, page = 1, query = '', filters = {}) {
-        const normalizedFilters = snakecaseKeys(filters)
+      ...extraActions,
+      async findAll(schoolId, page = 1, query = "", filters = {}) {
+        const normalizedFilters = snakecaseKeys(filters);
         const keys = Object.keys(normalizedFilters);
-        const filtersQs = keys.map((k) => `filters[${k}]`+'=' + normalizedFilters[k]).join('&');
-        
+        const filtersQs = keys
+          .map((k) => `filters[${k}]` + "=" + normalizedFilters[k])
+          .join("&");
+
         this.loading = true;
         const response = await request(
           `${config.baseUrl}/api/v1/schools/${schoolId}/${id}?page=${page}&query=${query}&${filtersQs}`
@@ -25,6 +28,15 @@ export const buildCrudStore = (id) => {
         this.list = camelcaseKeys(response.data, { deep: true });
         this.loading = false;
       },
+
+      // async findById(schoolId, resourceId, yearId) {
+      //   this.loading = true;
+      //   const response = await request(
+      //     `${config.baseUrl}/api/v1/schools/${schoolId}/${id}/${resourceId}?yearId=${yearId}`
+      //   );
+      //   this.loading = false;
+      //   return camelcaseKeys(response.data, { deep: true });
+      // },
       async create(model) {
         this.loading = true;
         const response = await request(
