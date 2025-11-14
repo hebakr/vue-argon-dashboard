@@ -29,14 +29,15 @@ export const buildCrudStore = (id, extraActions = {}) => {
         this.loading = false;
       },
 
-      // async findById(schoolId, resourceId, yearId) {
-      //   this.loading = true;
-      //   const response = await request(
-      //     `${config.baseUrl}/api/v1/schools/${schoolId}/${id}/${resourceId}?yearId=${yearId}`
-      //   );
-      //   this.loading = false;
-      //   return camelcaseKeys(response.data, { deep: true });
-      // },
+      async findById(schoolId, resourceId, yearId) {
+        this.loading = true;
+        const response = await request(
+          `${config.baseUrl}/api/v1/schools/${schoolId}/${id}/${resourceId}?yearId=${yearId}`
+        );
+        this.loading = false;
+        return camelcaseKeys(response.data, { deep: true });
+      },
+
       async create(model) {
         this.loading = true;
         const response = await request(

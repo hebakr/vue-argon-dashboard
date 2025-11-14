@@ -136,6 +136,7 @@ const columns = [
   {
     head: "Name",
     property: "fullName",
+    action: "show",
   },
   {
     head: "Gender",

@@ -5,9 +5,13 @@ import Configurations from "../views/Configurations.vue";
 import Dashboard from "../views/Dashboard";
 import Grades from "../views/Grades";
 import Profile from "../views/Profile.vue";
+import StudentDetails from "../views/StudentDetails.vue";
 import Students from "../views/Students.vue";
 import Subjects from "../views/Subjects.vue";
 import Teachers from "../views/Teachers.vue";
+import TimeTables from "../views/TimeTables.vue";
+import Parents from "../views/Parents.vue";
+import Attendance from "../views/Attendance.vue";
 
 const routes = [
   {
@@ -25,9 +29,19 @@ const routes = [
     component: Students,
   },
   {
+    path: "students/:id",
+    name: "studentDetails",
+    component: StudentDetails,
+  },
+  {
     path: "teachers",
     name: "teachers",
     component: Teachers,
+  },
+  {
+    path: "parents",
+    name: "parents",
+    component: Parents,
   },
   {
     path: "grades",
@@ -38,6 +52,16 @@ const routes = [
     path: "subjects",
     name: "subjects",
     component: Subjects,
+  },
+  {
+    path: "time-tables",
+    name: "time-tables",
+    component: TimeTables,
+  },
+  {
+    path: "attendance",
+    name: "attendance",
+    component: Attendance,
   },
   {
     path: "class-rooms",

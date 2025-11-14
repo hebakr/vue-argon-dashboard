@@ -21,10 +21,13 @@ const i18n = createI18n({
         dashboard: "Dashboard",
         students: "Students",
         teachers: "Teachers",
+        parents: "Parents",
         subjects: "Subjects",
         classRooms: "Class Rooms",
         classes: "Classes",
         grades: "Grades",
+        timeTables: "Time Tables",
+        attendance: "Attendance",
         configurations: "Configurations",
       },
       teacher: {

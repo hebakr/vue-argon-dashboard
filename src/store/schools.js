@@ -100,6 +100,14 @@ export const useSchoolsStore = defineStore({
             },
             {
               route: {
+                name: "parents",
+                params: { schoolId: state.currentSchool?.id || 0 },
+              },
+              title: "nav.parents",
+              icon: '<i class="fa fa-user text-primary text-lg opacity-8"></i>',
+            },
+            {
+              route: {
                 name: "grades",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
@@ -120,7 +128,7 @@ export const useSchoolsStore = defineStore({
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
               title: "nav.classes",
-              icon: '<i class="fa fa-building text-primary text-lg opacity-8"></i>',
+              icon: '<i class="fa fa-chalkboard text-primary text-lg opacity-8"></i>',
             },
             {
               route: {
@@ -128,7 +136,23 @@ export const useSchoolsStore = defineStore({
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
               title: "nav.classRooms",
-              icon: '<i class="fa fa-building text-primary text-lg opacity-8"></i>',
+              icon: '<i class="fa fa-door-open text-primary text-lg opacity-8"></i>',
+            },
+            {
+              route: {
+                name: "time-tables",
+                params: { schoolId: state.currentSchool?.id || 0 },
+              },
+              title: "nav.timeTables",
+              icon: '<i class="fa fa-calendar text-primary text-lg opacity-8"></i>',
+            },
+            {
+              route: {
+                name: "attendance",
+                params: { schoolId: state.currentSchool?.id || 0 },
+              },
+              title: "nav.attendance",
+              icon: '<i class="fa fa-calendar-check text-primary text-lg opacity-8"></i>',
             },
             {
               route: {
@@ -136,7 +160,7 @@ export const useSchoolsStore = defineStore({
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
               title: "nav.configurations",
-              icon: '<i class="fa fa-gear text-primary text-lg opacity-8"></i>',
+              icon: '<i class="fa fa-cogs text-primary text-lg opacity-8"></i>',
             },
           ];
     },
