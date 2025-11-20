@@ -7,6 +7,10 @@ const props = defineProps({
     type: String,
     default: "",
   },
+  prompt: {
+    type: String,
+    default: "Select",
+  },
   options: {
     type: Array,
   },
@@ -60,7 +64,7 @@ const getClasses = (success, error) => {
       :class="getClasses(success, error)"
       @blur="validator?.$validate()"
     >
-      <option value="">Select</option>
+      <option value="">{{ prompt }}</option>
       <option v-for="opt in options" :key="opt.id" :value="opt.id">
         {{ opt.title }}
       </option>

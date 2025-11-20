@@ -88,6 +88,7 @@ export const useAuthStore = defineStore({
     token: () => localStorage.authToken,
     currentUser: () => JSON.parse(localStorage.currentUser),
     isSuperAdmin: (state) => state.currentUser.roles.includes("super_admin"),
+    isAdmin: (state) => state.currentUser.roles.includes("admin"),
     isTeacher: (state) => state.currentUser.roles.includes("teacher"),
     isStudent: (state) => state.currentUser.roles.includes("student"),
   },

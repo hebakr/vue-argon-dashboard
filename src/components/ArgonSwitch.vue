@@ -21,6 +21,8 @@ defineProps({
     default: "",
   },
 });
+const model = defineModel();
+
 </script>
 <template>
   <div class="form-check form-switch ps-0">
@@ -29,6 +31,7 @@ defineProps({
       class="form-check-input ms-0"
       :class="inputClass"
       type="checkbox"
+      v-model="model"
       :name="name"
       :checked="checked"
     />

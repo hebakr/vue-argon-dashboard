@@ -18,23 +18,25 @@ const currentRoles = computed(() => {
 });
 
 const userHasAdminRole = computed(() => {
-  return currentRoles.value.includes('super_admin') || 
-    currentRoles.value.includes('brand_admin') || 
-    currentRoles.value.includes('school_admin') 
-})
+  return (
+    currentRoles.value.includes("super_admin") ||
+    currentRoles.value.includes("brand_admin") ||
+    currentRoles.value.includes("school_admin")
+  );
+});
 
 const userHasTeacherRole = computed(() => {
-  return currentRoles.value.includes('teacher')
-})
+  return currentRoles.value.includes("teacher");
+});
 
 const userHasStudentRole = computed(() => {
-  return currentRoles.value.includes('student')
-})
+  return currentRoles.value.includes("student");
+});
 </script>
 <template>
   <div>
-    <admin-dashboard v-if="userHasAdminRole"/>
-    <teacher-dashboard v-if="userHasTeacherRole"/>
-    <student-dashboard v-if="userHasStudentRole"/>
+    <admin-dashboard v-if="userHasAdminRole" />
+    <teacher-dashboard v-if="userHasTeacherRole" />
+    <student-dashboard v-if="userHasStudentRole" />
   </div>
 </template>

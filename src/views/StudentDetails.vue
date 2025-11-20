@@ -9,6 +9,8 @@ import AppSelect from "@/components/AppSelect.vue";
 import { useGradesStore } from "@/store/grades";
 import { useClassesStore } from "@/store/classes";
 import { useSchoolsStore } from "@/store/schools";
+import girl from "../assets/img/girl.svg";
+import boy from "../assets/img/boy.png";
 
 const schoolsStore = useSchoolsStore();
 const currentYearId = 1;
@@ -93,7 +95,7 @@ const handleGradeChange = (e) => {
             <div class="col-auto">
               <div class="avatar avatar-xl position-relative">
                 <img
-                  src="../assets/img/habiba.png"
+                  :src="data.gender === 'female' ? girl : boy"
                   alt="profile_image"
                   class="shadow-sm w-100 border-radius-lg"
                 />
