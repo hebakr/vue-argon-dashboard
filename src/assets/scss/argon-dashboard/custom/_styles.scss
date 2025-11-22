@@ -1,0 +1,15 @@
+.time-table-day {
+  scrollbar-color: #a5a4a4 #f1f1f1; 
+  // scrollbar-width: none;
+  // scrollbar-gutter: stable; 
+}
+
+.time-table-day::-webkit-scrollbar {
+  // display: none;
+  // // scrollbar-width: none;
+  // -ms-overflow-style: none;
+}
+.time-table-day:hover {
+  // scrollbar-width: thin;
+}
+

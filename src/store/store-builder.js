@@ -14,7 +14,7 @@ export const buildCrudStore = (id, extraActions = {}) => {
     }),
     actions: {
       ...extraActions,
-      async findAll(schoolId, page = 1, query = "", filters = {}) {
+      async findAll(schoolId, page = 1, query = "", filters = {}, per = 20) {
         const normalizedFilters = snakecaseKeys(filters);
         const keys = Object.keys(normalizedFilters);
         const filtersQs = keys
@@ -23,7 +23,7 @@ export const buildCrudStore = (id, extraActions = {}) => {
 
         this.loading = true;
         const response = await request(
-          `${config.baseUrl}/api/v1/schools/${schoolId}/${id}?page=${page}&query=${query}&${filtersQs}`
+          `${config.baseUrl}/api/v1/schools/${schoolId}/${id}?page=${page}&query=${query}&${filtersQs}&per=${per}`
         );
         this.list = camelcaseKeys(response.data, { deep: true });
         this.loading = false;

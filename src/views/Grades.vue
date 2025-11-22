@@ -30,6 +30,10 @@ const columns = [
     property: "sectionTitle",
   },
   {
+    head: "Time table profile",
+    property: "timeTableProfileTitle",
+  },
+  {
     head: "Status",
     property: "active",
     formatter: (d) => (d ? "Active" : "Not active"),
