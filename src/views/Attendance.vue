@@ -74,7 +74,7 @@ const submitAttendance = async () => {
     schoolsStore.currentYear?.id || 0,
     attendanceData
   );
-  
+
   if (response.error == null) {
     toast.success("Attendance recorded successfully!");
   } else {
@@ -187,7 +187,11 @@ const submitAttendance = async () => {
                   class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
                 >
                   <!-- <input type="checkbox" v-model="item.present" /> -->
-                  <argon-switch v-model="item.present" />
+                  <argon-switch
+                    :id="`present-${item.enrollmentId}`"
+                    class="test"
+                    v-model="item.present"
+                  />
                 </td>
               </tr>
             </tbody>
@@ -205,4 +209,9 @@ const submitAttendance = async () => {
     </div>
   </page-layout>
 </template>
+<style>
+.form-check-input {
+  height: 1.83em !important;
+}
+</style>
 

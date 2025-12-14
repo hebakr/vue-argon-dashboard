@@ -53,14 +53,19 @@ const buildUrl = (item) => {
             <span class="text-sm font-weight-bold">
               <router-link :to="buildUrl(item)" v-if="c.action"
                 >{{
-                  c.formatter ? c.formatter(item[c.property]) : item[c.property]
+                  c.formatter
+                    ? c.formatter(item[c.property], item)
+                    : item[c.property]
                 }}
               </router-link>
-              <span v-else>
-                {{
-                  c.formatter ? c.formatter(item[c.property]) : item[c.property]
-                }}
-              </span>
+              <span
+                v-else
+                v-html="
+                  c.formatter
+                    ? c.formatter(item[c.property], item)
+                    : item[c.property]
+                "
+              />
             </span>
           </td>
           <td :class="store.isRTL ? 'text-start' : 'text-end'" class="px-5">

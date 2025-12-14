@@ -108,43 +108,19 @@ export const useSchoolsStore = defineStore({
             },
             {
               route: {
-                name: "grades",
-                params: { schoolId: state.currentSchool?.id || 0 },
-              },
-              title: "nav.grades",
-              icon: '<i class="fa fa-list-ul text-primary text-lg opacity-8"></i>',
-            },
-            {
-              route: {
-                name: "subjects",
-                params: { schoolId: state.currentSchool?.id || 0 },
-              },
-              title: "nav.subjects",
-              icon: '<i class="fa fa-book-open text-primary text-lg opacity-8"></i>',
-            },
-            {
-              route: {
-                name: "classes",
-                params: { schoolId: state.currentSchool?.id || 0 },
-              },
-              title: "nav.classes",
-              icon: '<i class="fa fa-chalkboard text-primary text-lg opacity-8"></i>',
-            },
-            {
-              route: {
-                name: "class-rooms",
-                params: { schoolId: state.currentSchool?.id || 0 },
-              },
-              title: "nav.classRooms",
-              icon: '<i class="fa fa-door-open text-primary text-lg opacity-8"></i>',
-            },
-            {
-              route: {
                 name: "time-tables",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
               title: "nav.timeTables",
               icon: '<i class="fa fa-calendar text-primary text-lg opacity-8"></i>',
+            },
+            {
+              route: {
+                name: "fees",
+                params: { schoolId: state.currentSchool?.id || 0 },
+              },
+              title: "nav.fees",
+              icon: '<i class="fa fa-dollar-sign text-primary text-lg opacity-8"></i>',
             },
             {
               route: {

@@ -29,6 +29,7 @@ const i18n = createI18n({
         timeTables: "Time Tables",
         attendance: "Attendance",
         configurations: "Configurations",
+        fees: "Fees",
       },
       teacher: {
         firstName: "Hello world",

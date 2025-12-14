@@ -288,6 +288,10 @@ const handleGradeChange = (e) => {
               </app-dialog>
             </div>
           </div>
+
+          <div class="card card-profile p-3">
+            <h3>Student Fees</h3>
+          </div>
         </div>
       </div>
     </div>

@@ -28,6 +28,12 @@ const columns = [
     property: "active",
     formatter: (d) => (d ? "Active" : "Not active"),
   },
+  {
+    head: "Color",
+    property: "colorCode",
+    formatter: (d) =>
+      `<div style="width: 40px; height: 40px; background-color: ${d}; border-radius: 50%;"></div>`,
+  },
 ];
 
 const handleDelete = async (item) => {
@@ -38,7 +44,7 @@ const handleDelete = async (item) => {
 
 const handleFormOpen = (item) => {
   formOpen.value = true;
-  initialFormData.value = (item == null) ? {...fd} : {...item};
+  initialFormData.value = item == null ? { ...fd } : { ...item };
 };
 
 const handleSubmit = async (data) => {

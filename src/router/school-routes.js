@@ -12,6 +12,8 @@ import Teachers from "../views/Teachers.vue";
 import TimeTables from "../views/TimeTables.vue";
 import Parents from "../views/Parents.vue";
 import Attendance from "../views/Attendance.vue";
+import FeeCategories from "../views/FeeCategories.vue";
+import Fees from "../views/Fees.vue";
 
 const routes = [
   {
@@ -43,16 +45,7 @@ const routes = [
     name: "parents",
     component: Parents,
   },
-  {
-    path: "grades",
-    name: "grades",
-    component: Grades,
-  },
-  {
-    path: "subjects",
-    name: "subjects",
-    component: Subjects,
-  },
+
   {
     path: "time-tables",
     name: "time-tables",
@@ -64,24 +57,55 @@ const routes = [
     component: Attendance,
   },
   {
-    path: "class-rooms",
-    name: "class-rooms",
-    component: ClassRooms,
-  },
-  {
-    path: "classes",
-    name: "classes",
-    component: Classes,
-  },
-  {
-    path: "classes/:id",
-    name: "classDetails",
-    component: ClassDetails,
+    path: "fees",
+    name: "fees",
+    component: Fees,
   },
   {
     path: "configurations",
     name: "configurations",
     component: Configurations,
+    children: [
+      {
+        path: "",
+        redirect: { name: "subjects" },
+      },
+      {
+        path: "subjects",
+        name: "subjects",
+        component: Subjects,
+      },
+      {
+        path: "time-table-profiles",
+        name: "time-table-profiles",
+        component: <h1>Time table profiles</h1>,
+      },
+      {
+        path: "fee-categories",
+        name: "fee-categories",
+        component: FeeCategories,
+      },
+      {
+        path: "class-rooms",
+        name: "class-rooms",
+        component: ClassRooms,
+      },
+      {
+        path: "classes",
+        name: "classes",
+        component: Classes,
+      },
+      {
+        path: "classes/:id",
+        name: "classDetails",
+        component: ClassDetails,
+      },
+      {
+        path: "grades",
+        name: "grades",
+        component: Grades,
+      },
+    ],
   },
   {
     path: "profile",
