@@ -14,6 +14,7 @@ import Parents from "../views/Parents.vue";
 import Attendance from "../views/Attendance.vue";
 import FeeCategories from "../views/FeeCategories.vue";
 import Fees from "../views/Fees.vue";
+import Admissions from "../views/Admissions/Dashboard.vue";
 
 const routes = [
   {
@@ -24,6 +25,16 @@ const routes = [
     path: "dashboard",
     name: "dashboard",
     component: Dashboard,
+  },
+  {
+    path: "admissions",
+    name: "admissions",
+    component: Admissions,
+  },
+  {
+    path: "admissions/all",
+    name: "admissions-all",
+    component: <h1>All Applications</h1>,
   },
   {
     path: "students",

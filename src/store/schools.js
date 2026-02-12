@@ -84,6 +84,14 @@ export const useSchoolsStore = defineStore({
             },
             {
               route: {
+                name: "admissions",
+                params: { schoolId: state.currentSchool?.id || 0 },
+              },
+              title: "Admissions",
+              icon: '<i class="fa fa-user-plus text-primary text-lg opacity-8"></i>',
+            },
+            {
+              route: {
                 name: "students",
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
@@ -104,7 +112,7 @@ export const useSchoolsStore = defineStore({
                 params: { schoolId: state.currentSchool?.id || 0 },
               },
               title: "nav.parents",
-              icon: '<i class="fa fa-user text-primary text-lg opacity-8"></i>',
+              icon: '<i class="fa fa-user-friends text-primary text-lg opacity-8"></i>',
             },
             {
               route: {

@@ -24,54 +24,6 @@ const logout = async () => {
   await authStore.signout();
   router.push({ name: "signin" });
 };
-
-// const navItems = [
-//   {
-//     name: "dashboard",
-//     title: isRTL.value ? "لوحة القيادة" : "Dashboard",
-//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
-//   },
-//   {
-//     name: "students",
-//     title: isRTL.value ? "غرف الفصول" : "Students",
-//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
-//   },
-//   {
-//     name: "teachers",
-//     title: isRTL.value ? "غرف الفصول" : "Teachers",
-//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
-//   },
-//   {
-//     name: "grades",
-//     title: isRTL.value ? "غرف الفصول" : "Grades",
-//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
-//   },
-//   {
-//     name: "subjects",
-//     title: isRTL.value ? "المواد الدراسية" : "Subjects",
-//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
-//   },
-//   {
-//     name: "class-rooms",
-//     title: isRTL.value ? "غرف الفصول" : "Class Rooms",
-//     icon: '<i class="ni ni-tv-2 text-primary text-sm opacity-10"></i>',
-//   },
-//   // {
-//   //   name: "tables",
-//   //   title: isRTL.value ? " الجداول" : "Tables",
-//   //   icon: '<i class="ni ni-calendar-grid-58 text-warning text-sm opacity-10"></i>',
-//   // },
-//   // {
-//   //   name: "clients",
-//   //   title: isRTL.value ? "العملاء" : "Clients",
-//   //   icon: '<i class="ni ni-credit-card text-success text-sm opacity-10"></i>',
-//   // },
-//   // {
-//   //   name: "Brands",
-//   //   title: isRTL.value ? "المنظمات" : "Brands",
-//   //   icon: '<i class="ni ni-credit-card text-success text-sm opacity-10"></i>',
-//   // },
-// ];
 </script>
 <template>
   <div
@@ -86,7 +38,7 @@ const logout = async () => {
       >
         <sidenav-item
           :to="item.route"
-          :class="getRoute() === item.name ? 'active' : ''"
+          :class="getRoute().startsWith(item.name) ? 'active' : ''"
           :navText="$t(item.title)"
         >
           <template v-slot:icon>
